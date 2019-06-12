@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title> Phaser RPG Battle Multiplayer </title>
+
+    <!--
+    <script src="../utils/3.15.1.js"></script>
+    <!---->
+    <script type="module" src="game.js"></script>
+
+    <style>
+        body {
+            background-color: #222
+        }
+
+        #game-container {
+            margin: 0;
+            padding: 0;
+            min-width: 96vw;
+            min-height: 96vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #game-container>canvas {
+            border-radius: 5px;
+        }
+
+        #banner {
+            position: absolute; 
+            top: 1vh;
+            left: 1vw;
+            width: 98vw;
+            color: lightgrey;
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="game-container"></div>
+
+    <div id="banner">
+        <h2> Phaser 3 RPG Battle Multiplaeyr </h2>
+    </div>
+    
+</body>
+
+</html>
