@@ -1,10 +1,20 @@
-var express = require('express');
-var app = express();
-var server = require('http').Server(app);
-var io = require('socket.io').listen(server);
+
+/*********************************************************************/
+/* PROCESS */
+/*********************************************************************/
+const app = require('express')();
+const cors = require('cors');
+app.use(cors());
+
+process.env.PORT = process.env.PORT || 80;
+
+
+const server = require('http').Server(app);
+const io = require('socket.io').listen(server);
  
-var players = {};
+const players = {};
  
+
 app.use(express.static(__dirname));
  
 app.get('/', function (req, res) {
@@ -35,7 +45,7 @@ io.on('connection', function (socket) {
     io.emit('disconnect', socket.id);
   });
 });
- 
-server.listen(8081, function () {
-  console.log(`Listening on ${server.address().port}`);
-});
+
+
+const serverInitResponseHandler = error => console[error ? `error` : `log`](error ||  `server listening on port ${process.env.PORT}`); 
+app.listen(process.env.PORT, serverInitResponseHandler)
