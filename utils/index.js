@@ -1,9 +1,9 @@
 import Game from "./app.js";
-import Assets from "./resources.js";
+import Resources from "./resources.js";
 import InputController from "./inputControllerScene.js";
 
 
-Game.Resources = Assets.asyncFetch();
+Game.Resources = Resources.asyncFetch();
 
 Game.addScene = (SceneInitializer, startScene = false, sceneData = {}) => {
 	Game.scene.add(SceneInitializer.key, SceneInitializer, startScene, sceneData);

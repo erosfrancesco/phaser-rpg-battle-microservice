@@ -1,22 +1,26 @@
+const metadata = {
+	"ai":       { items: [] }, 
+	"actors":   { items: [] }, 
+	"actions":  { items: [] }, 
+	"sprites":  { items: [] }, 
+	"objects": { items: [] }, 
+	"commands": { items: [] }
+};
+const basePath = "https://arcane-whispers-7140.herokuapp.com/"
+
+
 const asyncFetch = async () => {
-	const res = {};
 	try {
-		const metadata = await getRequest("/resources");
-		if (!metadata) {
-			throw("metadata not found");
-		}
 		for ( const resource of Object.keys(metadata) ) {
-			const items = await getRequest("/resources/" + resource);
+			//console.log("fetching resource", resource)
+			const items = await getRequest(resource);
 			metadata[resource].items = items;
-			res[resource] = metadata[resource];
 		}
-		return res;
+		return metadata;
 	} catch(err) {
-		console.log("error in fetching all resources", err);
+		console.log("error in fetching resources", err);
 		return false;
 	}
-	
-	
 };
 
 const fetchResources = async callback => {
@@ -40,8 +44,9 @@ const fetchResources = async callback => {
 	callback(retErr, res);
 };
 
-const getRequest = async url => {
+const getRequest = async path => {
 	let res = null;
+	const url = basePath + path;
 	try {
 		const headers = new Headers();
 	    const options = { method: 'GET', headers };
@@ -57,4 +62,6 @@ const getRequest = async url => {
 };
 
 
-export default {fetch: fetchResources, asyncFetch};
+export default {
+	//fetch: fetchResources, 
+	asyncFetch};
