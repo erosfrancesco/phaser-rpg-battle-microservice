@@ -31,7 +31,7 @@ export default class StoreScene extends Phaser.Scene {
     // PHASER 3 SCENE METHODS
     init(params) {
         this.loadBuilder(aiBuilder, params.resources, "ai");
-        const ai = this.builders["ai"].get("5cec0573c46ead0017c41923")
+        const ai = this.builders["ai"].get("5d05547ea1e85e0017422ecb")
         ai(null, null, () => {
             console.log("control taken to main")
         })
