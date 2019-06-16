@@ -2,7 +2,7 @@ import protoBuilder from "./protoBuilder.js";
 
 
 const parseFunction = (encodedFunction, bodyHead = "", bodyAppend = "") => {
-    const {param = "", body = ""} = encodedFunction;
+    const {params = "", body = ""} = encodedFunction;
     const args = params.split(", ");
     return new Function(...args, bodyHead + body + bodyAppend);
 }
