@@ -2,7 +2,7 @@ import protoBuilder from "./protoBuilder.js";
 
 
 const parseFunction = (encodedFunction, bodyHead = "", bodyAppend = "") => {
-    const {param, body} = encodedFunction;
+    const {param = "", body = ""} = encodedFunction;
     const args = params.split(", ");
     return new Function(...args, bodyHead + body + bodyAppend);
 }
@@ -40,7 +40,7 @@ const buildAction = (properties, scene, Store) => {
 
 
     const resolveBodyHead = "const action = options;";
-    const resolveAction = parseFunction(create, resolveBodyHead);
+    const resolveAction = parseFunction(resolve, resolveBodyHead);
 
     return buildInGameAction(setupAction, createAction, resolveAction, Store)
 };
