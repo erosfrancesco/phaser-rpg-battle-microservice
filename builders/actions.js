@@ -1,35 +1,50 @@
-import storeFactory from "./store.js";
+import protoBuilder from "./protoBuilder.js";
 
 
-const buildAction = (imports, buildBody, resolveBody) => {
-    buildBody = "action.executor = executor;\n\
-                 action.target = target;\n\
-                 action.options = options;" + 
-                 buildBody + 
-                 "; return Object.assign(action);";
+const parseFunction = (encodedFunction, bodyHead = "", bodyAppend = "") => {
+    const {param, body} = encodedFunction;
+    const args = params.split(", ");
+    return new Function(...args, bodyHead + body + bodyAppend);
+}
 
-    const createAction = new Function("scene", "action", "executor", "target", "options", buildBody);
-    const resolveAction = new Function("scene", "action", "callback", resolveBody);
+const buildInGameAction = (setup, create, resolve, Store) => {
+    const protoAction = {}
 
-    
-    const protoAction = {};
+    protoAction.setup = setup;
 
-    protoAction.create = (scene, options = {}) => {
-        
+    protoAction.create = (scene, options = {}) => {    
         const {executor, target} = options;
         let act = {};
-        act = createAction(scene, act, executor, target, options);
+        act = create(scene, act, executor, target, options);
 
-        act.resolve = callback => resolveAction(Store.scene, act, callback);
+        act.resolve = callback => resolve(Store.scene, act, callback);
         return act;
     };
-    /**/
-    return protoAction;
+
+    return protoBuilder
+}
+
+
+const buildAction = (properties, scene, Store) => {
+    const {setup, create, resolve} = properties;
+
+
+    const setupAction = parseFunction(setup);
+
+
+    const createBodyHead = "action.executor = executor;\n\
+                            action.target = target;\n\
+                            action.options = options;";
+    const createBodyAppend = "; return Object.assign(action);";
+    const createAction = parseFunction(create, createBodyHead, setupBodyAppend);
+
+
+    const resolveBodyHead = "const action = options;";
+    const resolveAction = parseFunction(create, resolveBodyHead);
+
+    return buildInGameAction(setupAction, createAction, resolveAction, Store)
 };
 
-const Store = storeFactory(resource => {
-    const {imports, build, resolve} = resource;
-    return buildAction(imports, build, resolve);
-});
+const Store = protoBuilder((properties, scene) => buildAction(properties, scene, Store) );
 
 export default Store;

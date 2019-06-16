@@ -23,6 +23,7 @@ const asyncFetch = async () => {
 	}
 };
 
+/*
 const fetchResources = async callback => {
 	let res = {};
 	let retErr = null;
@@ -43,6 +44,7 @@ const fetchResources = async callback => {
 	
 	callback(retErr, res);
 };
+/**/
 
 const getRequest = async path => {
 	let res = null;

@@ -7,7 +7,10 @@ import objectBuilder from "./objects.js";
 import spriteBuilder from "./sprites.js";
 //import battleStore from "./battles.js";
 /**/
+import actionBuilder from "./actions.js";
 import aiBuilder from "./ai.js";
+
+import test from "./test.js";
 
 export default class StoreScene extends Phaser.Scene {
 
@@ -30,11 +33,13 @@ export default class StoreScene extends Phaser.Scene {
 
     // PHASER 3 SCENE METHODS
     init(params) {
+        
+        this.loadBuilder(actionBuilder, params.resources, "actions");
         this.loadBuilder(aiBuilder, params.resources, "ai");
-        const ai = this.builders["ai"].get("5d05547ea1e85e0017422ecb")
-        ai(null, null, () => {
-            console.log("control taken to main")
-        })
+
+        test.ai(this);
+        test.action(this);
+
         /*
         this.loadBuilder(commandBuilder, params.resources, "commands");
         this.loadBuilder(actionBuilder, params.resources, "actions");

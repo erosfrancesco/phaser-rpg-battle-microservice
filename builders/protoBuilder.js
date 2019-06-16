@@ -14,7 +14,7 @@ export default parse => {
 
         //getLabel: indx => Object.keys(builder.items)[indx],
         
-        preload: _id => builder.items[_id].preload(builder.scene),
+        preload: _id => builder.items[_id].setup(builder.scene),
         create: (_id, ...options) => {
             console.log(_id, builder.items[_id]);
             builder.items[_id].create(builder.scene, ...options)
