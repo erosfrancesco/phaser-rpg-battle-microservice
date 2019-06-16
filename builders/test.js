@@ -1,18 +1,22 @@
 const getFirstItem = (scene, category) => {
 	const builder = scene.builders[category];
-	const firstItem = Object.keys( builder.items ) [0]
-	return builder.get(firstItem.id)
+	return builder.getAt(0)
 }
 
 
 const action = scene => {
-	const item = getFirstItem(scene, "ai")
-	console.log(item);
+	/*
+	const item = getFirstItem(scene, "actions")
+	const act = item.create(scene, {});
+	act.resolve({}, () => console.log("all right") )
+	/**/
 }
 
 const ai = scene => {
-	const item = getFirstItem(scene, "ai")
-	item(null, null, () => console.log("control taken to main") );	
+	/*
+	const item = getFirstItem(scene, "ai");
+	item(null, null, () => console.log("control taken to main") );
+	/**/	
 }
 
 

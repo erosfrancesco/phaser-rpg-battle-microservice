@@ -8,6 +8,7 @@ const parseFunction = (encodedFunction, bodyHead = "", bodyAppend = "") => {
 }
 
 const buildInGameAction = (setup, create, resolve, Store) => {
+
     const protoAction = {}
 
     protoAction.setup = setup;
@@ -15,34 +16,32 @@ const buildInGameAction = (setup, create, resolve, Store) => {
     protoAction.create = (scene, options = {}) => {    
         const {executor, target} = options;
         let act = {};
-        act = create(scene, act, executor, target, options);
-
-        act.resolve = callback => resolve(Store.scene, act, callback);
+        act = create(scene, act, executor, target);
+        act.resolve = (options, callback) => resolve(Store.scene, act, executor, target, options, callback);
         return act;
     };
 
-    return protoBuilder
+
+    return protoAction
 }
 
 
 const buildAction = (properties, scene, Store) => {
     const {setup, create, resolve} = properties;
 
-
     const setupAction = parseFunction(setup);
-
 
     const createBodyHead = "action.executor = executor;\n\
                             action.target = target;\n\
                             action.options = options;";
     const createBodyAppend = "; return Object.assign(action);";
-    const createAction = parseFunction(create, createBodyHead, setupBodyAppend);
+    const createAction = parseFunction(create, createBodyHead, createBodyAppend);
+
+    const resolveAction = parseFunction(resolve);
 
 
-    const resolveBodyHead = "const action = options;";
-    const resolveAction = parseFunction(resolve, resolveBodyHead);
-
-    return buildInGameAction(setupAction, createAction, resolveAction, Store)
+    const act = buildInGameAction(setupAction, createAction, resolveAction, Store);
+    return act;
 };
 
 const Store = protoBuilder((properties, scene) => buildAction(properties, scene, Store) );

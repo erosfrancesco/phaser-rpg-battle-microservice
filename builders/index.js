@@ -12,6 +12,8 @@ import aiBuilder from "./ai.js";
 
 import test from "./test.js";
 
+
+
 export default class StoreScene extends Phaser.Scene {
 
 	constructor(...args) {
