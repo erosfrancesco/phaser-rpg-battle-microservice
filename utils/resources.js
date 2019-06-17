@@ -1,10 +1,11 @@
 const metadata = {
-	"ai":       { items: [] }, 
-	"actors":   { items: [] }, 
-	"actions":  { items: [] }, 
-	"sprites":  { items: [] }, 
-	"objects": { items: [] }, 
-	"commands": { items: [] }
+	"actions":  	{ items: [] },
+	"actors":   	{ items: [] }, 
+	"ai":       	{ items: [] },  
+	"animations": 	{ items: [] }, 
+	"commands": 	{ items: [] }, 
+	"objects": 		{ items: [] },
+	"sprites":  	{ items: [] }, 
 };
 const basePath = "https://arcane-whispers-7140.herokuapp.com/"
 

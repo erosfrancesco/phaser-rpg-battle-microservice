@@ -1,20 +1,17 @@
-import storeFactory from "./store.js";
+import protoBuilder from "./protoBuilder.js";
 
-const build = (label, actionBody) => {
+const commandBuilder = (properties, scene) => {
 
-    const action = new Function("scene", "options", actionBody);
+	const {label, action} = properties;
+	const {params, body} = action;
+	const args = params.split(", ");
+    const commandAction = new Function(...args, body);
 
-    const item = {
+    return {
         label,
-        action: (options = {}) => action(commandStore.scene, options)
+        action: (options = {}) => commandAction(builder.scene, options)
     };
-    return item;
 };
 
-
-const commandStore = storeFactory((resource) => {
-    const {label, action} = resource;
-    return build(label, action);
-});
-
-export default commandStore;
+const builder = protoBuilder((properties, scene) => commandBuilder(properties, scene) );
+export default builder

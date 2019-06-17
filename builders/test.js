@@ -19,8 +19,20 @@ const ai = scene => {
 	/**/	
 }
 
+const animation = scene => {
+
+}
+
+const sprite = scene => {
+	const item = getFirstItem(scene, "sprites");
+	item.preload(scene)
+	const sprite = item.create(scene, 100, 100);
+	console.log(sprite)
+}
 
 export default {
 	action,
-	ai
+	ai,
+	animation,
+	sprite
 }
