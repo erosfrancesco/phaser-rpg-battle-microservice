@@ -33,25 +33,33 @@ const actorBuilder = (properties, scene) => {
             const spriteProto = scene.builders.sprites.get(sprite)
             spriteProto.preload();
         },
-        create: (x, y, isEnemy) => {
+        create: (x, y, isEnemyOpt = false, isAllyOpt = false) => {
             const spriteProto = scene.builders.sprites.get(sprite);
             const spriteObj = spriteProto.create(scene, x, y);
             
             // check if can be enemy or ally, or none
-            if (!isEnemy) {
-                spriteObj.flipX();
-            }
+            // if (!isEnemyOpt) {
+            //     spriteObj.flipX();
+            // }
 
 
-            actorPrototype.sprite = spriteObj;
-            actorPrototype.commands = commandParser(actorCommands, scene);
-            actorPrototype.ai = scene.builders.ai.get(ai);
+            const Sprite = spriteObj;
+            const Commands = commandParser(actorCommands, scene);
+            const AI = scene.builders.ai.get(ai);
+            const statspp = statParser(stats)
+
+            const isAlly = () => isAllyOpt
+            const isEnemy = () => isEnemyOpt
+
+
+
+            return {AI, Commands, Sprite, isAlly, isEnemy, name, stats: statspp}
         },
 
         canBeAlly,
         canBeEnemy,
         name,
-        stats: statParser(stats)
+        //stats: statParser(stats)
     }
     
     return actorPrototype;

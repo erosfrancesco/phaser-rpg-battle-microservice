@@ -1,13 +1,14 @@
-import buildBattleActor from "../js/actor/battleActor.js";
+import buildBattleActor from "../js/actor/index.js";
 
 function build(scene, template) {
 
-
     // BUILD
-    const {label, options = {}} = template;
-    const {x = 0, y = 0, stats = {}} = options;
-    const actor = scene.stores.Actors.create(label, x, y);
-    buildBattleActor(actor, template.options);
+    const {protoObject, options = {}} = template;
+    const {x = 0, y = 0, stats = {}, isEnemy = false, isAlly = false} = options;
+
+
+    const actor = protoObject.create(x, y, isEnemy, isAlly);
+    buildBattleActor(actor, options);
 
 
     // PLACEHOLDER
@@ -21,10 +22,10 @@ function build(scene, template) {
     };
 
 
-    // TURN EVENTS AND UI BAR
-    actor.statusBars = scene.stores.BattleObjects.create("PlayerBars", { actor });
+    // // TURN EVENTS AND UI BAR
+    // //actor.statusBars = scene.stores.BattleObjects.create("PlayerBars", { actor });
     actor.events.onDamage = callback => {
-        actor.statusBars.refresh();
+        //actor.statusBars.refresh();
         callback();
     }
     actor.events.onDeath = callback => {
@@ -45,8 +46,8 @@ function build(scene, template) {
         callback();
     }
     actor.Turn.events.onUpdate = callback => {
-        const value = 1 + 100 * actor.Turn.counter / actor.Turn.max;
-        actor.statusBars.setATBValue(value);
+        //const value = 1 + 100 * actor.Turn.counter / actor.Turn.max;
+        //actor.statusBars.setATBValue(value);
         callback();
     }
 

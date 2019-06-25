@@ -2,7 +2,7 @@ import StatsSystem from "./actorStats.js";
 
 
 // MOCK ACTOR CONTROLLER
-const buildBattleActor = (actor, {stats}) => {
+const buildBattleActor = (actor, stats) => {
 
     // stats
     const customStats = stats || {};

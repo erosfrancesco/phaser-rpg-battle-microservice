@@ -24,6 +24,7 @@ function PlayerTurnSystem(actor, inactive = false) {
     };
 
     this.update = () => {
+
         if (this.inactive && this.flags.ready) { 
             return; 
         }

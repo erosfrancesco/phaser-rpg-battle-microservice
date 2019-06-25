@@ -1,14 +1,19 @@
-//import StatsSystem from "./actorStats.js";
 import TurnSystem from "./actorTurn.js";
-
 import StatPlugin from "./stats/index.js";
+
 // MOCK ACTOR CONTROLLER
 const buildBattleActor = (actor, template = {}) => {
+
+    // adjust sprite
+    if (actor.isAlly()) {
+        actor.Sprite.flipX();
+    }
+    
 
     // turn
     actor.Turn = new TurnSystem(actor);
 
-    StatPlugin(actor, template);
+    StatPlugin(actor, template.stats);
 
     // events & helpers
     actor.events = {
@@ -24,8 +29,6 @@ const buildBattleActor = (actor, template = {}) => {
         callback();
     }
 
-
-    /*
     actor.applyDamage = (value, callback = function() {}) => {
         const dmg = actor.Stats.getStatModifier("damage", "life");
         actor.Stats.putStatModifier("damage", "life", { value: dmg - value });
@@ -36,8 +39,6 @@ const buildBattleActor = (actor, template = {}) => {
         const dmg = actor.Stats.getStatModifier("usedMana", "remainingMana");
         actor.Stats.putStatModifier("usedMana", "remainingMana", { value: dmg - value });
     }
-    /**/
-    actor.isAlly = () => !actor.isEnemy;
 }
 
 
