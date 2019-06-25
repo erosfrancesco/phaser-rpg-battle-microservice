@@ -5,7 +5,7 @@ const __scene_key = "BattleScene";
 import AssetsScene from "../builders/index.js";
 //import MenuStore from "../js/menu/menuStore.js";
 
-import StackRegistry from "../js/utils/StackRegistry.js";
+import StackRegistry from "../js/utils/stackRegistry.js";
 import FiniteStateStack from "../js/utils/finiteStateStack.js";
 
 import buildBattleActor from "../js/actorController.js";
