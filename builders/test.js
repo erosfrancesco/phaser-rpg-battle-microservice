@@ -24,10 +24,12 @@ const animation = scene => {
 }
 
 const sprite = scene => {
-	const item = getFirstItem(scene, "sprites");
-	item.preload(scene)
-	const sprite = item.create(scene, 100, 100);
-	console.log(sprite)
+	const item = getFirstItem(scene, "actors");
+
+	console.log(item)
+	//item.preload(scene)
+	//const sprite = item.create(scene, 100, 100);
+	//console.log(sprite)
 }
 
 export default {

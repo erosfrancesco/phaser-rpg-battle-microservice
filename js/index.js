@@ -2,7 +2,7 @@ import BatteScene from "./battle.js";
 import Game from "../utils/index.js";
 
 //import menuStore from "../js/uniquemenus/menus.js";
-import FightMenuWrapper from "../js/menu/menus/fightMenuWrapper.js";
+//import FightMenuWrapper from "../js/menu/menus/fightMenuWrapper.js";
 
 
 export default class BattleWrapper extends BatteScene {
@@ -13,56 +13,58 @@ export default class BattleWrapper extends BatteScene {
 	init(...args) {
 		super.init(...args);
 
+		console.log(args, this)
 
-		const keyCallbacks = {
-			"UP": () => {
-				
-				const menu = this.Menus.selectedMenu;
-				if (!(menu && menu.moveSelectionUp)) {
-					return;
-				}
-				menu.moveSelectionUp();
-				/**/
-			},
-			"DOWN": () => {
-				
-				const menu = this.Menus.selectedMenu;
-				if (!(menu && menu.moveSelectionDown)) {
-					return;
-				}
 
-				menu.moveSelectionDown();
-				/**/
-			},
-			"A": () => {
+		// const keyCallbacks = {
+		// 	"UP": () => {
 				
-				const menu = this.Menus.selectedMenu;
-				if (!(menu && menu.selectedItem)) {
-					return;
-				}
-				menu.selectedItem.actionWhenActive();
-				// SHOULD DISABLE THE A BUTTON
-			},
-			"S": () => {
+		// 		const menu = this.Menus.selectedMenu;
+		// 		if (!(menu && menu.moveSelectionUp)) {
+		// 			return;
+		// 		}
+		// 		menu.moveSelectionUp();
+		// 		/**/
+		// 	},
+		// 	"DOWN": () => {
 				
-				const menu = this.Menus.selectedMenu;
-				if (!(menu && this.Menus.length > 1)) {
-					return;
-				}
-				this.Menus.unload();
-			},
-			"P": () => {
-				if (this.isPausingTransitionActive) {
-					return;
-				}
-				this.isPausingTransitionActive = true;
-				this.togglePause(() => {
-					this.isPausingTransitionActive = false;
-				});
-			}
-		};
+		// 		const menu = this.Menus.selectedMenu;
+		// 		if (!(menu && menu.moveSelectionDown)) {
+		// 			return;
+		// 		}
 
-		Game.scene.scenes[0].delegate = {keyCallbacks};
+		// 		menu.moveSelectionDown();
+		// 		/**/
+		// 	},
+		// 	"A": () => {
+				
+		// 		const menu = this.Menus.selectedMenu;
+		// 		if (!(menu && menu.selectedItem)) {
+		// 			return;
+		// 		}
+		// 		menu.selectedItem.actionWhenActive();
+		// 		// SHOULD DISABLE THE A BUTTON
+		// 	},
+		// 	"S": () => {
+				
+		// 		const menu = this.Menus.selectedMenu;
+		// 		if (!(menu && this.Menus.length > 1)) {
+		// 			return;
+		// 		}
+		// 		this.Menus.unload();
+		// 	},
+		// 	"P": () => {
+		// 		if (this.isPausingTransitionActive) {
+		// 			return;
+		// 		}
+		// 		this.isPausingTransitionActive = true;
+		// 		this.togglePause(() => {
+		// 			this.isPausingTransitionActive = false;
+		// 		});
+		// 	}
+		// };
+
+		// Game.scene.scenes[0].delegate = {keyCallbacks};
 	}
 
 	create(...args) {
@@ -87,6 +89,8 @@ export default class BattleWrapper extends BatteScene {
 		this.resume();
 	}
 
-	buildDiv() {}
-
 };
+
+
+Game.addScene(BattleWrapper);
+Game.startScene(BattleWrapper.key);

@@ -1,16 +1,16 @@
 import protoBuilder from "./protoBuilder.js";
 
 const spriteBuilder = (properties, scene) => {
-    const {src, frameX, frameY, frameWidth, frameHeight, scaleX, scaleY} = properties;
+    const {src, frameX = 0, frameY = 0, frameWidth, frameHeight, scaleX = 100, scaleY = 100} = properties;
 
     return {
-        preload: scene => {
+        preload: () => {
             const options = { frameWidth: Number(frameWidth), frameHeight: Number(frameHeight) };
             scene.load.spritesheet(src, src, options);
             console.log("loaded", src)
         },
         create: (scene, x = 0, y = 0) => {
-            
+           
             const item = new Phaser.Physics.Matter.Sprite(scene.matter.world, Number(x), Number(y), src);
             item.body.isSensor = true;
             item.wrapper = scene.add.container(0, 0);

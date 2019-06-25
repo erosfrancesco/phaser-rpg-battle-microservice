@@ -1,10 +1,9 @@
 import Game from "./utils/index.js";
-//import Logic from "./test/index.js";
+import Logic from "./js/index.js";
 
 
-import BuilderScene from "../builders/index.js";
-Game.addScene(BuilderScene);
-Game.startScene(BuilderScene.key);
+// import BuilderScene from "../builders/index.js";
+
 
 
 window.Game = Game;

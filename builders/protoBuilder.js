@@ -10,9 +10,6 @@ export default parse => {
         },
         get: _id => builder.items[_id],
         getAt: i => builder.items[ Object.keys(builder.items)[i] ],
-        //getByLabel: label => 
-
-        //getLabel: indx => Object.keys(builder.items)[indx],
         
         preload: _id => builder.items[_id].setup(builder.scene),
         create: (_id, ...options) => {

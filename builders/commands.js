@@ -9,7 +9,7 @@ const commandBuilder = (properties, scene) => {
 
     return {
         label,
-        action: (options = {}) => commandAction(builder.scene, options)
+        action: (options = {}, callback) => commandAction(builder.scene, options, callback)
     };
 };
 
