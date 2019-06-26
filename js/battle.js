@@ -3,7 +3,6 @@ const __scene_key = "BattleScene";
 
 // IMPORTS
 import AssetsScene from "../builders/index.js";
-//import MenuStore from "../js/menu/menuStore.js";
 
 import StackRegistry from "../js/utils/stackRegistry.js";
 import FiniteStateStack from "../js/utils/finiteStateStack.js";
@@ -11,6 +10,8 @@ import FiniteStateStack from "../js/utils/finiteStateStack.js";
 import buildBattleActor from "../js/actorController.js";
 import buildBattleTurn from "../js/turnController.js";
 import buildBattleController from "../js/battleController.js";
+import buildMenuManager from "../js/menuController.js";
+
 //
 
 // test
@@ -23,8 +24,8 @@ import buildBattleController from "../js/battleController.js";
 export default class BattleScene extends AssetsScene {
     constructor(...args) {
         super(...args);
-        // MENU STORE
-        //this.Menus = new MenuStore(this);
+        // MENUS
+        this.Menus = new buildMenuManager(this);
     }
 
     static get key() {
@@ -33,28 +34,22 @@ export default class BattleScene extends AssetsScene {
 
 
     // PHASER 3 SCENE METHODS
-    init(...args) {
-        super.init(...args);
-        // //const battleOptions = this.stores.BattleOptions.get(params.battle);
-        this.battleTemplate = {}//Object.assign(params.battle, battleOptions);
+    init(params) {
+        super.init(params);
+        
+        this.battleTemplate = Object.assign(params.battle, {});
 
-        this.actor0 = this.builders.actors.getAt(0);
-        this.actor1 = this.builders.actors.getAt(1);
+        //const battleOptions = this.stores.BattleOptions.get(params.battle);
+        //Object.assign(params.battle, battleOptions);
     }
     
     preload() {
         super.preload()
 
-
-        this.actor0.preload();
-        this.actor1.preload();
-
-        // this.battleTemplate.actors.forEach(actor => {
-        //     const {label} = actor;
-        //     this.stores.Actors.preload(label);
-        // });
-
-        // this.stores.BattleObjects.forEach(label => this.stores.BattleObjects.preload(label));
+        this.battleTemplate.actors.forEach(actor => {
+            const {id} = actor;
+            this.builders.actors.get(id).preload();
+        });
 
         // this.battleTemplate.events.preload(this)
     }
@@ -70,19 +65,6 @@ export default class BattleScene extends AssetsScene {
         this.turnExecutionQueue = new FiniteStateStack();
         buildBattleTurn(this);
 
-
-        buildBattleActor(this, {
-            protoObject: this.actor0,
-            options: {x: 200, y: 200, isEnemy: true}
-        })
-
-        buildBattleActor(this, {
-            protoObject: this.actor1,
-            options: {x: 700, y: 200, isAlly: true}
-        })
-
-
-
         // Battle onWin and onLose
         buildBattleController(this, 
             () => this.battleTemplate.events.onWin(this), 
@@ -90,9 +72,18 @@ export default class BattleScene extends AssetsScene {
         );
         
         // ACTORS
-        //this.battleTemplate.actors.forEach(template => buildBattleActor(this, template) );
-        //this.battleTemplate.events.create(this);
+        this.battleTemplate.actors.forEach(actor => {
+            const {id, options} = actor;
+            const protoObject = this.builders.actors.get(id);
 
+            buildBattleActor(this, {
+                protoObject,
+                options
+            });
+        });
+
+
+        //this.battleTemplate.events.create(this);
     }
     
     update() {
@@ -106,6 +97,7 @@ export default class BattleScene extends AssetsScene {
             this.Players.forEach(a => a.Turn.update());
             this.Enemies.forEach(a => a.Turn.update());
         });
+
         // this.battleTemplate.events.update(this);
     }
 };

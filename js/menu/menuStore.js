@@ -1,4 +1,4 @@
-import MenuBuilder from "./menus/index.js";
+//import MenuBuilder from "./menus/index.js";
 
 export default class MenuManager {
 	constructor(scene) {
@@ -15,16 +15,16 @@ export default class MenuManager {
 		return this.menus.length - 1;
 	}
 
-	build(type, ...args) {
-		return MenuBuilder[type](this.scene, ...args);
-	}
+	// TO REDO
+	// build(type, ...args) {
+	// 	return MenuBuilder[type](this.scene, ...args);
+	// }
 
 	load(menu) {
 		this.menus.push(menu);
 	}
 
 	unload() {
-		console.log("unloding", this.length);
 		this.selectedMenu.destroy();
 		this.menus.splice(this.length, 1);
 	}

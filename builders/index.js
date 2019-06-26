@@ -15,7 +15,9 @@ import commandBuilder from "./commands.js";
 import objectBuilder from "./objects.js";
 import spriteBuilder from "./sprites.js";
 
-import test from "./test.js";
+//import test from "./test.js";
+
+import Game from "../utils/index.js"
 
 
 

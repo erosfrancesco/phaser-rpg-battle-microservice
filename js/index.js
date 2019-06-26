@@ -13,7 +13,7 @@ export default class BattleWrapper extends BatteScene {
 	init(...args) {
 		super.init(...args);
 
-		console.log(args, this)
+		//console.log(args, this)
 
 
 		// const keyCallbacks = {
@@ -93,4 +93,22 @@ export default class BattleWrapper extends BatteScene {
 
 
 Game.addScene(BattleWrapper);
-Game.startScene(BattleWrapper.key);
+
+const battle = {
+	actors: [
+		{
+			id: "5cf7dda1b5be12001770ee7d",
+			options: {x: 200, y: 200, isEnemy: true}
+		},
+		{
+			id: "5d1238ae2bf77900174dcd9c",
+			options: {x: 700, y: 200, isAlly: true}
+		}
+	],
+	events: {}
+}
+Game.startScene(BattleWrapper.key, {battle});
+
+
+
+
