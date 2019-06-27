@@ -84,6 +84,14 @@ export default class BattleScene extends AssetsScene {
 
 
         //this.battleTemplate.events.create(this);
+
+
+        const textBuilder = this.builders.objects.get("5d14a57518f27c001781ba51");
+        
+        const text = textBuilder.create(this, {x: 200, y: 100, text: "hello world"});
+        console.log(text)
+        text.play("5cf565ebdee597001732297d")
+        setTimeout(() => text.destroy(), 2000)
     }
     
     update() {

@@ -14,26 +14,39 @@ const objectBuilder = (properties, scene) => {
         const component = battleObject.data[k];\
         if (component.destroy) { component.destroy(); };\
     });\n"
+    const createAppend = "\
+    \nreturn battleObject;\
+    ";
 
-    const createFunction = parseFunction(create);
+    const createFunction = parseFunction(create, "", createAppend);
     const destroyFunction = parseFunction(destroy, destroyHead);
     const setupFunction = parseFunction(destroy);
 
-    const Animations = {};
-    animations.forEach(id => {
-        Animation[id] = scene.builders["animations"].get(id)
-    });
 
     const objectCreator = {
+        
         preload: scene => preloadFunction(scene),
         create: (scene, options = {}) => {
-            const o = Object.assign({data: {}, Animations, scene}, objectCreator);
-            o.play = (name, callback, options = {}) => o.Animations[name](o, callback, options);
-            o.destroy = callback => destroyFunction(o, callback);
-            
-            return createFunction(scene, o, options);
-        }
+            const Animations = {};
+            animations.forEach(id => { Animations[id] = scene.builders.animations.get(id) });
+
+            let o = {
+                scene,
+                Animations,
+                data: {},
+            };
+
+            console.log("built", animations, o)
+
+            o = createFunction(scene, o, options);
+            o.destroy = (opts = {}, callback = function() {}) => destroyFunction(scene, o, opts, callback);
+            o.play = (name, options = {}, callback = function() {}) => o.Animations[name](scene, Object.assign(options, {battleObject: o}), callback);
+            return o;
+        },
+        
     };
+
+    
     return objectCreator;
 
 }
