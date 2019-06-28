@@ -36,8 +36,6 @@ const objectBuilder = (properties, scene) => {
                 data: {},
             };
 
-            console.log("built", animations, o)
-
             o = createFunction(scene, o, options);
             o.destroy = (opts = {}, callback = function() {}) => destroyFunction(scene, o, opts, callback);
             o.play = (name, options = {}, callback = function() {}) => o.Animations[name](scene, Object.assign(options, {battleObject: o}), callback);
