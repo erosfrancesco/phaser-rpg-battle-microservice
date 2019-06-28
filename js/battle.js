@@ -44,13 +44,17 @@ export default class BattleScene extends AssetsScene {
     preload() {
         super.preload();
 
-        // this should go after actor preloading
-        this.battleTemplate.events.preload(this);
-
         this.battleTemplate.actors.forEach(actor => {
             const {id} = actor;
-            this.builders.actors.get(id).preload();
+            const actorProto = this.builders.actors.get(id);
+            if (actorProto) {
+                actorProto.preload();
+            } else {
+                console.log("preloading. actor not found: ", id);
+            }
         });  
+
+        this.battleTemplate.events.preload(this);
     }
 
     create() {
@@ -75,21 +79,20 @@ export default class BattleScene extends AssetsScene {
             const {id, options} = actor;
             const protoObject = this.builders.actors.get(id);
 
-            buildBattleActor(this, {
-                protoObject,
-                options
-            });
+            if (protoObject) {
+                buildBattleActor(this, {
+                    protoObject,
+                    options
+                });
+            } else {
+                console.log("building. actor not found: ", id);
+            }
+
+            
         });
 
 
         this.battleTemplate.events.create(this);
-
-
-        const textBuilder = this.builders.objects.get("5d14a57518f27c001781ba51");
-        
-        const text = textBuilder.create(this, {x: 200, y: 100, text: "hello world"});
-        text.play("5cf565ebdee597001732297d")
-        setTimeout(() => text.destroy(), 2000)
     }
     
     update() {
@@ -104,7 +107,7 @@ export default class BattleScene extends AssetsScene {
             this.Enemies.forEach(a => a.Turn.update());
         });
 
-        // this.battleTemplate.events.update(this);
+        //this.battleTemplate.events.update(this);
     }
 };
 //
