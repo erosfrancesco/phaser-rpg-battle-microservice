@@ -36,22 +36,21 @@ export default class BattleScene extends AssetsScene {
     // PHASER 3 SCENE METHODS
     init(params) {
         super.init(params);
-        
-        this.battleTemplate = Object.assign(params.battle, {});
 
-        //const battleOptions = this.stores.BattleOptions.get(params.battle);
-        //Object.assign(params.battle, battleOptions);
+        const battleOptions = this.builders.battle.getAt(0);
+        this.battleTemplate = Object.assign(params.battle, battleOptions);
     }
     
     preload() {
-        super.preload()
+        super.preload();
+
+        // this should go after actor preloading
+        this.battleTemplate.events.preload(this);
 
         this.battleTemplate.actors.forEach(actor => {
             const {id} = actor;
             this.builders.actors.get(id).preload();
-        });
-
-        // this.battleTemplate.events.preload(this)
+        });  
     }
 
     create() {
@@ -83,13 +82,12 @@ export default class BattleScene extends AssetsScene {
         });
 
 
-        //this.battleTemplate.events.create(this);
+        this.battleTemplate.events.create(this);
 
 
         const textBuilder = this.builders.objects.get("5d14a57518f27c001781ba51");
         
         const text = textBuilder.create(this, {x: 200, y: 100, text: "hello world"});
-        console.log(text)
         text.play("5cf565ebdee597001732297d")
         setTimeout(() => text.destroy(), 2000)
     }

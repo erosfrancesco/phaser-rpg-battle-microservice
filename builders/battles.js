@@ -1,34 +1,37 @@
-import storeFactory from "./store.js";
+import protoBuilder from "./protoBuilder.js";
 
-const defaultWinEvent  = 'console.log("you win");  scene.pause();';
-const defaultLoseEvent = 'console.log("you lose"); scene.pause();';
+//const defaultWinEvent  = 'console.log("you win");  scene.pause();';
+//const defaultLoseEvent = 'console.log("you lose"); scene.pause();';
 
-const build = (actors, events) => {
+
+const parseFunction = encodedFunction => {
+    const {params, body} = encodedFunction;
+    const args = params.split(", ");
+    return new Function(...args, body);
+}
+
+const battleBuilder = (properties, scene) => {
+
 	const {
-        preload = '', 
-        create  = '', 
-        update  = '', 
-        onWin   = defaultWinEvent, 
-        onLose  = defaultLoseEvent
-    } = events;
+        actors,
+        preload,
+        create,
+        update,
+        onWin, 
+        onLose,
+    } = properties;
 
     const item = { 
         actors, 
         events: {
-            preload: new Function("scene", preload),
-            create : new Function("scene", create),
-            update : new Function("scene", update), 
-            onWin  : new Function("scene", onWin),
-            onLose : new Function("scene", onLose)
+            preload: parseFunction(preload),
+            create : parseFunction(create),
+            update : parseFunction(update),
+            onWin  : parseFunction(onWin),
+            onLose : parseFunction(onLose)
         } 
     };
     return item;
 };
 
-export default storeFactory(resource => {
-    const {
-    	actors = [], 
-        preload, create, update, onWin, onLose
-    } = resource;
-    return build(actors, {preload, create, update, onWin, onLose});
-});
+export default protoBuilder((properties, scene) => battleBuilder(properties, scene) );

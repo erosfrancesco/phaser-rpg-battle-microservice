@@ -1,21 +1,12 @@
-/*
-import actionBuilder from "./actions.js";
-import actorBuilder from "./actors.js";
-import aiBuilder from "./ai.js";
-import commandBuilder from "./commands.js";
-import objectBuilder from "./objects.js";
-import spriteBuilder from "./sprites.js";
-//import battleStore from "./battles.js";
-/**/
 import actionBuilder from "./actions.js";
 import actorBuilder from "./actors.js";
 import aiBuilder from "./ai.js";
 import animationBuilder from "./animations.js";
+import battleBuilder from "./battles.js";
 import commandBuilder from "./commands.js";
 import objectBuilder from "./objects.js";
 import spriteBuilder from "./sprites.js";
 
-//import test from "./test.js";
 
 import Game from "../utils/index.js"
 
@@ -51,33 +42,13 @@ export default class StoreScene extends Phaser.Scene {
         this.loadBuilder(spriteBuilder, params.resources, "sprites");
 
         this.loadBuilder(actorBuilder, params.resources, "actors");
-
-        //test.ai(this);
-        //test.action(this);
-        //test.sprite(this);
-
-        /*
-        this.loadBuilder(commandBuilder, params.resources, "commands");
-        this.loadBuilder(actionBuilder, params.resources, "actions");
-        this.loadBuilder(spriteBuilder, params.resources, "sprites");
-        this.loadBuilder(aiBuilder, params.resources, "ai");
-        this.loadBuilder(actorBuilder, params.resources, "actors");
-        this.loadBuilder(objectBuilder, params.resources, "objects");
-        //this.loadBuilder(battleBuilder, params.resources, "BattleOptions");
-        /**/
+        this.loadBuilder(battleBuilder, params.resources, "battle");
     }
 
 
     preload() {
-        // const builder = this.builders.sprites;
-        // const item =  builder.getAt(0);
-        // item.preload();
     }
 
     create() {
-        // const builder = this.builders.sprites;
-        // const item =  builder.getAt(0);
-        // const sprite = item.create(100, 100); 
-        // console.log(sprite)
     }
 };
