@@ -5,9 +5,15 @@ const spriteBuilder = (properties, scene) => {
 
     return {
         preload: () => {
+            scene.isRequesting = scene.isRequesting || {}
+            if (scene.isRequesting[src]) {
+                return;
+            }
+
+            scene.isRequesting[src] = src;
             const options = { frameWidth: Number(frameWidth), frameHeight: Number(frameHeight) };
             scene.load.spritesheet(src, src, options);
-            console.log("loaded", src)
+            console.log("loaded", src);
         },
         create: (scene, x = 0, y = 0) => {
            

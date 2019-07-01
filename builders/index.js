@@ -24,29 +24,64 @@ export default class StoreScene extends Phaser.Scene {
     }
 
     // HELPERS
-    loadBuilder(builder, resources, category) {
+    loadBuilder(builder, category) {
         builder.init(this);
-        resources[category].items.forEach(builder.parse);
+        this.protoResources[category].items.forEach(builder.parse);
         this.builders[category] = builder;
     }
 
 
     // PHASER 3 SCENE METHODS
     init(params) {
-        
-        this.loadBuilder(actionBuilder, params.resources, "actions");
-        this.loadBuilder(aiBuilder, params.resources, "ai");
-        this.loadBuilder(animationBuilder, params.resources, "animations");
-        this.loadBuilder(commandBuilder, params.resources, "commands");
-        this.loadBuilder(objectBuilder, params.resources, "objects");
-        this.loadBuilder(spriteBuilder, params.resources, "sprites");
+        this.protoResources = params.resources;
 
-        this.loadBuilder(actorBuilder, params.resources, "actors");
-        this.loadBuilder(battleBuilder, params.resources, "battle");
+        this.loadBuilder(actionBuilder,    "actions");
+        this.loadBuilder(aiBuilder,        "ai");
+        this.loadBuilder(animationBuilder, "animations");
+        this.loadBuilder(commandBuilder,   "commands");
+        this.loadBuilder(objectBuilder,    "objects");
+        this.loadBuilder(spriteBuilder,    "sprites");
+        this.loadBuilder(actorBuilder,     "actors");
+        this.loadBuilder(battleBuilder,    "battle");
     }
+
+    // preloadAllItemsFromBuilder(builder) {
+    //     builder.forEach(id => {
+    //         //const item = builder.get(id);
+    //         //if (item) {
+    //             builder.preload(id);
+    //         //} else {
+    //         //    console.log("item not found: ", id, builder);
+    //         //}
+    //     });
+    // }
 
 
     preload() {
+
+        this.builders["actions"].forEach(id => {
+            const item = this.builders["actions"].get(id);
+            item.setup(this);
+        });
+
+        this.builders["objects"].forEach(id => {
+            const item = this.builders["objects"].get(id);
+            item.setup(this);
+        });
+
+        this.builders["sprites"].forEach(id => {
+            const item = this.builders["sprites"].get(id);
+            item.preload(this);
+        });
+
+        //this.preloadAllItemsFromBuilder(this.builders["actions"]);
+        // this.preloadAllItemsFromBuilder(this.builders["ai"]);
+        // this.preloadAllItemsFromBuilder(this.builders["animations"]);
+        // this.preloadAllItemsFromBuilder(this.builders["commands"]);
+        // this.preloadAllItemsFromBuilder(this.builders["objects"]);
+        // this.preloadAllItemsFromBuilder(this.builders["sprites"]);
+        // this.preloadAllItemsFromBuilder(this.builders["actors"]);
+        // this.preloadAllItemsFromBuilder(this.builders["battle"]);
     }
 
     create() {

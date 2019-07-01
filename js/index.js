@@ -67,6 +67,10 @@ export default class BattleWrapper extends BatteScene {
 		// Game.scene.scenes[0].delegate = {keyCallbacks};
 	}
 
+	preload(...args) {
+		super.preload(...args)
+	}
+
 	create(...args) {
 		super.create(...args);
 	}

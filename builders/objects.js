@@ -20,12 +20,12 @@ const objectBuilder = (properties, scene) => {
 
     const createFunction = parseFunction(create, "", createAppend);
     const destroyFunction = parseFunction(destroy, destroyHead);
-    const setupFunction = parseFunction(destroy);
+    const setupFunction = parseFunction(setup);
 
 
     const objectCreator = {
         
-        preload: scene => preloadFunction(scene),
+        setup: scene => setupFunction(scene),
         create: (scene, options = {}) => {
             const Animations = {};
             animations.forEach(id => { Animations[id] = scene.builders.animations.get(id) });

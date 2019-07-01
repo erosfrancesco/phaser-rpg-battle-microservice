@@ -37,22 +37,27 @@ export default class BattleScene extends AssetsScene {
     init(params) {
         super.init(params);
 
-        const battleOptions = this.builders.battle.getAt(0);
-        this.battleTemplate = Object.assign(params.battle, battleOptions);
+        this.battleTemplate = params.battle
+
+        //const battleOptions = this.builders.battle.getAt(0);
+        //this.battleTemplate = Object.assign(params.battle, battleOptions);
     }
     
     preload() {
         super.preload();
 
-        this.battleTemplate.actors.forEach(actor => {
-            const {id} = actor;
-            const actorProto = this.builders.actors.get(id);
-            if (actorProto) {
-                actorProto.preload();
-            } else {
-                console.log("preloading. actor not found: ", id);
-            }
-        });  
+        // this.battleTemplate.actors.forEach(actor => {
+        //     const {id} = actor;
+        //     const actorProto = this.builders.actors.get(id);
+        //     if (actorProto) {
+        //         actorProto.preload();
+        //     } else {
+        //         console.log("preloading. actor not found: ", id);
+        //     }
+        // });  
+
+        const battleOptions = this.builders.battle.getAt(0);
+        this.battleTemplate = Object.assign(this.battleTemplate, battleOptions);
 
         this.battleTemplate.events.preload(this);
     }
