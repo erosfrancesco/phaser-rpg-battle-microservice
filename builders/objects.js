@@ -19,7 +19,7 @@ const objectBuilder = (properties, scene) => {
     ";
 
     const createFunction = parseFunction(create, "", createAppend);
-    const destroyFunction = parseFunction(destroy, destroyHead);
+    const destroyFunction = parseFunction((destroy == "" ? "callback();" : destroy))//, destroyHead);
     const setupFunction = parseFunction(setup);
 
 
@@ -37,7 +37,13 @@ const objectBuilder = (properties, scene) => {
             };
 
             o = createFunction(scene, o, options);
-            o.destroy = (opts = {}, callback = function() {}) => destroyFunction(scene, o, opts, callback);
+            o.destroy = (opts = {}, callback = function() {}) => destroyFunction(scene, o, opts, () => { 
+                Object.keys(o.data).forEach(k => {
+                    const component = o.data[k];
+                    if (component.destroy) { component.destroy(); };
+                });
+                callback(); 
+            });
             o.play = (name, options = {}, callback = function() {}) => o.Animations[name](scene, Object.assign(options, {battleObject: o}), callback);
             return o;
         },
