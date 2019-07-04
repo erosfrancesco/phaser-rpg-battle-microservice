@@ -30,6 +30,9 @@
 
         #game-container>canvas {
             border-radius: 5px;
+            position: fixed; 
+            top: calc(50% - 250px);
+            left: calc(50% - 450px);
         }
 
         #banner {
@@ -45,12 +48,10 @@
 </head>
 
 <body>
-    <div id="game-container"></div>
-
     <div id="banner">
         <h2> Phaser 3 RPG Battle Multiplayer </h2>
+        <div id="game-container"></div>
     </div>
-    
 </body>
 
 </html>

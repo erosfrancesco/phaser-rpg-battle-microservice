@@ -6,7 +6,7 @@ import Logic from "./js/index.js";
 
 
 
-window.Game = Game;
+//window.Game = Game;
 
 
 /*
