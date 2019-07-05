@@ -13,7 +13,7 @@ const defaultOnGameWin = scene => {
 
 function buildBattleController(scene, onGameWin = defaultOnGameWin, onGameOver = defaultOnGameOver) {
 
-    scene.events = { onGameWin, onGameOver };
+    scene.events = Object.assign(scene.events || {}, { onGameWin, onGameOver } );
 
     scene.battleUpdate = c => scene.checkLose(() => scene.checkWin(c) );
     scene.checkWin  = c => scene.Enemies.size() ? c() : scene.events.onGameWin(scene);
