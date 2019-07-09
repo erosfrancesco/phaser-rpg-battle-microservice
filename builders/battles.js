@@ -1,14 +1,11 @@
 import protoBuilder from "./protoBuilder.js";
 
+import HELPERS from "./utils/index.js";
+const { parseEncodedFunction } = HELPERS;
+
 //const defaultWinEvent  = 'console.log("you win");  scene.pause();';
 //const defaultLoseEvent = 'console.log("you lose"); scene.pause();';
 
-
-const parseFunction = encodedFunction => {
-    const {params, body} = encodedFunction;
-    const args = params.split(", ");
-    return new Function(...args, body);
-}
 
 const battleBuilder = (properties, scene) => {
 
@@ -24,11 +21,11 @@ const battleBuilder = (properties, scene) => {
     const item = { 
         actors, 
         events: {
-            preload: parseFunction(preload),
-            create : parseFunction(create),
-            update : parseFunction(update),
-            onWin  : parseFunction(onWin),
-            onLose : parseFunction(onLose)
+            preload: parseEncodedFunction(preload),
+            create : parseEncodedFunction(create),
+            update : parseEncodedFunction(update),
+            onWin  : parseEncodedFunction(onWin),
+            onLose : parseEncodedFunction(onLose)
         } 
     };
     return item;

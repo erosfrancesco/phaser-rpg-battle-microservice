@@ -1,11 +1,9 @@
 import protoBuilder from "./protoBuilder.js";
 
-const animationBuilder = (properties, scene) => {
-	const {params, body, type} = properties;
-	const args = params.split(", ");
-    const animation = new Function(...args, body);
+import HELPERS from "./utils/index.js";
+const { parseEncodedFunction } = HELPERS;
 
-    return animation;
-};
+
+const animationBuilder = (properties, scene) => parseEncodedFunction(properties);
 
 export default protoBuilder((properties, scene) => animationBuilder(properties, scene) );

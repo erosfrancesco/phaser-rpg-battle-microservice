@@ -38,23 +38,11 @@ export default class BattleScene extends AssetsScene {
         super.init(params);
 
         this.battleTemplate = params.battle
-
-        //const battleOptions = this.builders.battle.getAt(0);
-        //this.battleTemplate = Object.assign(params.battle, battleOptions);
     }
     
     preload() {
         super.preload();
-
-        // this.battleTemplate.actors.forEach(actor => {
-        //     const {id} = actor;
-        //     const actorProto = this.builders.actors.get(id);
-        //     if (actorProto) {
-        //         actorProto.preload();
-        //     } else {
-        //         console.log("preloading. actor not found: ", id);
-        //     }
-        // });  
+        this.createLoadingBar();
 
         const battleOptions = this.builders.battle.getAt(0);
         this.battleTemplate = Object.assign(this.battleTemplate, battleOptions);
@@ -113,6 +101,28 @@ export default class BattleScene extends AssetsScene {
         });
 
         //this.battleTemplate.events.update(this);
+    }
+
+
+    /*Loading bar*/
+    createLoadingBar() {
+        const progressBar = this.add.graphics();
+        const progressBox = this.add.graphics();
+        progressBox.fillStyle(0x222222, 0.8);
+        progressBox.fillRoundedRect(240, 270, 320, 50);
+        
+        const width = this.cameras.main.width;
+        const height = this.cameras.main.height;
+            
+        this.load.on('progress', value => {
+            progressBar.fillStyle(0xffffff, 1);
+            progressBar.fillRoundedRect(250, 280, 300 * value, 30);
+        });
+
+        this.load.on('complete', () => {
+            progressBar.destroy();
+            progressBox.destroy();
+        });
     }
 };
 //

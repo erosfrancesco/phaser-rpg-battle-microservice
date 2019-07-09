@@ -1,10 +1,7 @@
 import protoBuilder from "./protoBuilder.js";
 
-const parseFunction = (encodedFunction, bodyHead = "", bodyAppend = "") => {
-    const {params = "", body = ""} = encodedFunction;
-    const args = params.split(", ");
-    return new Function(...args, bodyHead + body + bodyAppend);
-}
+import HELPERS from "./utils/index.js";
+const { parseEncodedFunction } = HELPERS;
 
 const objectBuilder = (properties, scene) => {
     const {animations, setup, create, destroy} = properties;
@@ -18,9 +15,9 @@ const objectBuilder = (properties, scene) => {
     \nreturn battleObject;\
     ";
 
-    const createFunction = parseFunction(create, "", createAppend);
-    const destroyFunction = parseFunction((destroy == "" ? "callback();" : destroy))//, destroyHead);
-    const setupFunction = parseFunction(setup);
+    const createFunction = parseEncodedFunction(create, "", createAppend);
+    const destroyFunction = parseEncodedFunction((destroy == "" ? "callback();" : destroy))
+    const setupFunction = parseEncodedFunction(setup);
 
 
     const objectCreator = {

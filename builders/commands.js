@@ -1,11 +1,13 @@
 import protoBuilder from "./protoBuilder.js";
 
+import HELPERS from "./utils/index.js";
+const { parseEncodedFunction } = HELPERS;
+
+
 const commandBuilder = (properties, scene) => {
 
 	const {label, action} = properties;
-	const {params, body} = action;
-	const args = params.split(", ");
-    const commandAction = new Function(...args, body);
+    const commandAction = parseEncodedFunction(action)
 
     return {
         label,

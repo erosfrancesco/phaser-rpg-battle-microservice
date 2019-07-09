@@ -16,14 +16,14 @@ const buildBattleActor = (actor, template = {}) => {
     StatPlugin(actor, template.stats);
 
     // events & helpers
-    actor.events = {
-        onDamage: c => c(),
-        onDeath:  c => c()
-    };
+    actor.events = Object.assign(actor.events, {
+        // damage: c => c(),
+        // ko:  c => c()
+    });
 
     actor.checkDeath = callback => {
         if (actor.getLife() <= 0) {
-            actor.events.onDeath(() => callback());
+            actor.events.ko(() => callback());
             return;
         }
         callback();
@@ -32,7 +32,7 @@ const buildBattleActor = (actor, template = {}) => {
     actor.applyDamage = (value, callback = function() {}) => {
         const dmg = actor.Stats.getStatModifier("damage", "life");
         actor.Stats.putStatModifier("damage", "life", { value: dmg - value });
-        actor.events.onDamage(() => actor.checkDeath(callback) );
+        actor.events.damage(() => actor.checkDeath(callback) );
     }
 
     actor.useMana = value => {

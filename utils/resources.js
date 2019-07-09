@@ -12,16 +12,19 @@ const basePath = "https://arcane-whispers-7140.herokuapp.com/"
 
 
 const asyncFetch = async () => {
-	try {
-		for ( const resource of Object.keys(metadata) ) {
-			const items = await getRequest(resource);
+
+	const promises = [];
+
+	Object.keys(metadata).forEach(resource => {
+		const promise = fetchPromise(resource).then(items => {
 			metadata[resource].items = items;
-		}
-		return metadata;
-	} catch(err) {
-		console.log("error in fetching resources", err);
-		return false;
-	}
+		});
+		promises.push(promise);
+	});
+
+	await Promise.all(promises).catch(error => console.error(error));
+
+	return metadata
 };
 
 const getRequest = async path => {
@@ -41,5 +44,20 @@ const getRequest = async path => {
 	return res;
 };
 
+const fetchPromise = path => fetch(basePath + path).then(res => res.json());
+
 
 export default { asyncFetch };
+
+
+// old asyncFetch
+// try {
+// 	for ( const resource of Object.keys(metadata) ) {
+// 		const items = await getRequest(resource);
+// 		metadata[resource].items = items;
+// 	}
+// 	return metadata;
+// } catch(err) {
+// 	console.log("error in fetching resources", err);
+// 	return false;
+// }

@@ -1,11 +1,8 @@
+import HELPERS from "./utils/index.js";
+const { parseEncodedFunction } = HELPERS;
+
 import protoBuilder from "./protoBuilder.js";
 
-
-const parseFunction = (encodedFunction, bodyHead = "", bodyAppend = "") => {
-    const {params = "", body = ""} = encodedFunction;
-    const args = params.split(", ");
-    return new Function(...args, bodyHead + body + bodyAppend);
-}
 
 const buildInGameAction = (setup, create, resolve, Store) => {
 
@@ -29,15 +26,15 @@ const buildInGameAction = (setup, create, resolve, Store) => {
 const buildAction = (properties, scene, Store) => {
     const {setup, create, resolve} = properties;
 
-    const setupAction = parseFunction(setup);
+    const setupAction = parseEncodedFunction(setup);
 
     const createBodyHead = "action.executor = executor;\n\
                             action.target = target;\n\
                             action.options = options;";
     const createBodyAppend = "; return Object.assign(action);";
-    const createAction = parseFunction(create, createBodyHead, createBodyAppend);
+    const createAction = parseEncodedFunction(create, createBodyHead, createBodyAppend);
 
-    const resolveAction = parseFunction(resolve);
+    const resolveAction = parseEncodedFunction(resolve);
 
 
     const act = buildInGameAction(setupAction, createAction, resolveAction, Store);
