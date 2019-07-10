@@ -15,7 +15,7 @@ function PlayerTurnSystem(actor, inactive = false) {
     this.computeDelta = ComputeAtbDelta;
 
     this.events = {
-        onReady:  c => c(),
+        onReady: c => c(),
         onUpdate: c => c()
     };
 
@@ -34,12 +34,19 @@ function PlayerTurnSystem(actor, inactive = false) {
         if (this.counter >= this.max) { 
             this.counter = this.max;
             this.flags.ready = true;
-            this.events.onReady(foo => {});
+
+            // must check the sequence
+            this.actor.events.turnStart(this.actor.scene, this.actor, () => {
+                this.events.onReady(foo => {});
+            });
+
             return;
         }
 
-            
-        this.events.onUpdate(foo => {});
+        // must check the sequence
+        this.events.onUpdate(foo => {
+            this.actor.events.turnUpdate(this.actor.scene, this.actor, () => {})
+        });
     }
 
     this.stop = () => {

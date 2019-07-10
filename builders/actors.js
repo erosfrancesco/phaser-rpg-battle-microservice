@@ -39,8 +39,11 @@ const actorBuilder = (properties, scene) => {
             const isEnemy = () => isEnemyOpt
 
 
-
-            return {AI, Commands, Sprite, isAlly, isEnemy, name, stats: statspp, events: eventspp}
+            //const a = 
+            return {AI, Commands, Sprite, isAlly, isEnemy, name, stats: statspp, events: eventspp};
+            // a.events.create(scene, {actor: a}, () => {
+            //     return a;
+            // });
         },
 
         canBeAlly,

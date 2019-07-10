@@ -2,7 +2,7 @@ import TurnSystem from "./actorTurn.js";
 import StatPlugin from "./stats/index.js";
 
 // MOCK ACTOR CONTROLLER
-const buildBattleActor = (actor, template = {}) => {
+const buildBattleActor = (scene, actor, template = {}) => {
 
     // adjust sprite
     if (actor.isAlly()) {
@@ -39,6 +39,8 @@ const buildBattleActor = (actor, template = {}) => {
         const dmg = actor.Stats.getStatModifier("usedMana", "remainingMana");
         actor.Stats.putStatModifier("usedMana", "remainingMana", { value: dmg - value });
     }
+
+    actor.events.create(scene, actor, () => {});
 }
 
 

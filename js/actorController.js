@@ -4,11 +4,11 @@ function build(scene, template) {
 
     // BUILD
     const {protoObject, options = {}} = template;
-    const {x = 0, y = 0, stats = {}, isEnemy = false, isAlly = false} = options;
+    const {x = 0, y = 0, stats = {}, isEnemy = false, isAlly = false} = options
 
 
     const actor = protoObject.create(x, y, isEnemy, isAlly);
-    buildBattleActor(actor, options);
+    buildBattleActor(scene, actor, options);
 
 
     // PLACEHOLDER
@@ -22,32 +22,36 @@ function build(scene, template) {
     };
 
 
-    // // TURN EVENTS AND UI BAR
-    // //actor.statusBars = scene.stores.BattleObjects.create("PlayerBars", { actor });
-    actor.events.onDamage = callback => {
-        //actor.statusBars.refresh();
-        callback();
-    }
-    actor.events.onDeath = callback => {
-        console.log(actor.name, "is dead");
 
-        // check if the turn queues have some references to this actor
-        // console debug
-        //console.log( "current actor on this registry: ", actor.getRegistry().stack.current() );
-        //
+
+    // TURN EVENTS AND UI BAR
+    // //actor.statusBars = scene.stores.BattleObjects.create("PlayerBars", { actor });
+    // actor.events.damage = callback => {
+    //     //actor.statusBars.refresh();
+    //     callback();
+    // }
+    // actor.events.ko = callback => {
+    //     console.log(actor.name, "is dead");
+
+    //     // check if the turn queues have some references to this actor
+    //     // console debug
+    //     //console.log( "current actor on this registry: ", actor.getRegistry().stack.current() );
+    //     //
         
-        actor.getRegistry().unregister(actor.id);
-        callback();
-    }
+    //     actor.getRegistry().unregister(actor.id);
+    //     callback();
+    // }
 
     actor.Turn.events.onReady = callback => {
         actor.Turn.pause();
         actor.getRegistry().add(actor);
+        // actor event
         callback();
     }
     actor.Turn.events.onUpdate = callback => {
         //const value = 1 + 100 * actor.Turn.counter / actor.Turn.max;
         //actor.statusBars.setATBValue(value);
+        // actor event
         callback();
     }
 
