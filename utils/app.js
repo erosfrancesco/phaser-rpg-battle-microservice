@@ -1,41 +1,36 @@
+const margin = "30px"
+
 import config from "./config.js";
 
-// const initApp = () => {
-//     //window.addEventListener('resize', e => resizeApp() );      
-//     //resizeApp();
-// }
+const initApp = () => {
+    window.addEventListener('resize', e => resizeApp() );      
+    resizeApp();
+}
 
-// // Resize
-// const resizeApp = () => {
-//     const div = document.getElementById('game-container');
+// Resize
+const resizeApp = () => {
+    const div = document.getElementById('game-container');
     
-//     if (!div) { return; }
+    if (!div) { return; }
 
-//     (window.innerHeight > window.innerWidth) ? resizeDivByHeight(div) : resizeDivByWidth(div);
+    const ratio = config.height / config.width;
 
-//     // const height = window.innerHeight * (8 / 6);
+    ( window.innerHeight > (window.innerWidth * ratio) ) ? resizeDivByHeight(div, ratio) : resizeDivByWidth(div, ratio);
+}
 
-//     // div.style.width = height;
-//     // div.style.height = height * config.height / config.width;
-// }
-        
-// const resizeDivByWidth = div => {
-// 	const size = window.innerHeight * (8 / 6);
-// 	const ratio = config.height / config.width;
+const resizeDivByWidth = (div, ratio) => {
+	div.style.height = "calc(100% - " + margin + ")";
+    div.style.width  = "calc(" + (100 / ratio) + "vh - " + margin + ")";
+    div.style.marginTop  = "calc(50% - (" + div.style.height + " / 2) - (" + margin + ") / 2)";
+}
 
-//     div.style.width = size;
-//     div.style.height = size * ratio;
-// }
+const resizeDivByHeight = (div, ratio) => {
+	div.style.width  = "calc(100% - " + margin + ")";
+    div.style.height = "calc(" + (100 * ratio) + "vw - " + margin + ")";
+    div.style.marginTop  = "calc(50vh - (" + div.style.height + " / 2) - (" + margin + ") / 2)";
+}
 
-// const resizeDivByHeight = div => {
-// 	const size = window.innerHeight * (8 / 6);
-// 	const ratio = config.height / config.width;
-
-//     div.style.height = size;
-//     div.style.width = size / ratio;
-// }
-
-// initApp();
+initApp();
 
 const game = new Phaser.Game(config);
 

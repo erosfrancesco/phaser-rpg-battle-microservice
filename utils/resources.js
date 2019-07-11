@@ -14,9 +14,10 @@ const basePath = "https://arcane-whispers-7140.herokuapp.com/"
 const asyncFetch = async () => {
 
 	const promises = [];
+	const token = await getAuthToken();
 
 	Object.keys(metadata).forEach(resource => {
-		const promise = fetchPromise(resource).then(items => {
+		const promise = fetchPromise(resource, token).then(items => {
 			metadata[resource].items = items;
 		});
 		promises.push(promise);
@@ -27,37 +28,39 @@ const asyncFetch = async () => {
 	return metadata
 };
 
-const getRequest = async path => {
-	let res = null;
-	const url = basePath + path;
-	try {
-		const headers = new Headers();
-	    const options = { method: 'GET', headers };
-	    const request = new Request(url, options);
+// login
+const getAuthToken = async () => {
 
-	    const data = await fetch(request);
-	    res = data.json();
-	} catch(err) {
-		console.log("error in async get request", err);
-	}
+	const headers = new Headers();
+	headers.append('Accept', 'application/json');
+	headers.append("Content-Type", "application/json");
 
-	return res;
-};
+	const body = JSON.stringify({
+		"username": "jason",
+		"password": "darthvent"
+	});
 
-const fetchPromise = path => fetch(basePath + path).then(res => res.json());
+	const options = { method: 'POST', headers, body };
+	const request = new Request(basePath + "users/authenticate", options);
+	const data = await fetch(request)
+	const json = await data.json()
+
+	return json.token || false;
+}
+//
+
+const fetchPromise = (path, token) => {
+	//const headers = new Headers();
+	//headers.append("Authorization", "Bearer " + token);
+	const options = { 
+		headers : {
+			"Authorization": "Bearer " + token
+		}
+	};
+	console.log(options)
+
+	return fetch(basePath + path, options).then(res => res.json());
+}
 
 
 export default { asyncFetch };
-
-
-// old asyncFetch
-// try {
-// 	for ( const resource of Object.keys(metadata) ) {
-// 		const items = await getRequest(resource);
-// 		metadata[resource].items = items;
-// 	}
-// 	return metadata;
-// } catch(err) {
-// 	console.log("error in fetching resources", err);
-// 	return false;
-// }
