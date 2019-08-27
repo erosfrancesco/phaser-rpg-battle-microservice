@@ -42,7 +42,7 @@ export default class StoreScene extends Phaser.Scene {
         this.loadBuilder(objectBuilder,    "objects");
         this.loadBuilder(spriteBuilder,    "sprites");
         this.loadBuilder(actorBuilder,     "actors");
-        this.loadBuilder(battleBuilder,    "battle");
+        this.loadBuilder(battleBuilder,    "battles");
     }
 
     // preloadAllItemsFromBuilder(builder) {

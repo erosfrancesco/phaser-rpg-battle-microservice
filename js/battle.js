@@ -44,7 +44,7 @@ export default class BattleScene extends AssetsScene {
         super.preload();
         this.createLoadingBar();
 
-        const battleOptions = this.builders.battle.getAt(0);
+        const battleOptions = this.builders.battles.getAt(0);
         this.battleTemplate = Object.assign(this.battleTemplate, battleOptions);
 
         this.battleTemplate.events.preload(this);

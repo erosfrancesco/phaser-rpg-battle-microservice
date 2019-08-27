@@ -31,9 +31,9 @@ const eventParser = (events, scene) => {
         ret[name] = parseEncodedFunction(events[name]);
     });
 
-    events.custom.forEach(({name, value}) => {
+    events.custom.forEach(({name, params, body}) => {
         if (!ret[name]) {
-            ret[name] = parseEncodedFunction(value);
+            ret[name] = parseEncodedFunction({params, body});
         }
     });
     

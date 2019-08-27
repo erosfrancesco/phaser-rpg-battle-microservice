@@ -3,7 +3,7 @@ const margin = "30px"
 import config from "./config.js";
 
 const initApp = () => {
-    window.addEventListener('resize', e => resizeApp() );      
+    window.addEventListener('resize', e => resizeApp() ); 
     resizeApp();
 }
 
@@ -15,7 +15,11 @@ const resizeApp = () => {
 
     const ratio = config.height / config.width;
 
+    // div.style.maxWidth = config.width + "px";
+    // div.style.maxHeight = config.height + "px";
+
     ( window.innerHeight > (window.innerWidth * ratio) ) ? resizeDivByHeight(div, ratio) : resizeDivByWidth(div, ratio);
+   
 }
 
 const resizeDivByWidth = (div, ratio) => {
