@@ -9,5 +9,12 @@ export default {
             //debug: true,
             gravity: { y: 0 }
         }
+    },
+    plugins: {
+        global: [{
+            key: 'rexDrag',
+            plugin: DragPlugin,
+            start: true
+        }]
     }
 };
