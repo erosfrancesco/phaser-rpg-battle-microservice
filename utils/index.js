@@ -1,9 +1,9 @@
 import Game from "./app.js";
 import Resources from "./resources.js";
 import InputController from "./inputControllerScene.js";
-import DragPlugin from "./dragplugin.js"
+// import DragPlugin from "./dragplugin.min.js"
 
-Game.DragPlugin = DragPlugin;
+// Game.DragPlugin = DragPlugin;
 Game.Resources = Resources.asyncFetch();
 
 Game.addScene = (SceneInitializer, startScene = false, sceneData = {}) => {

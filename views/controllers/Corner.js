@@ -1,24 +1,19 @@
 import "./plugins/rexuiplugin.min.js"
 
-export default class PropertyButton extends RexPlugins.UI.Label {
-    constructor(scene) {
+export default class Corner extends RexPlugins.UI.Label {
+    constructor(scene, x = 100, y = 100) {
         if (!scene) {
-            console.error("HEY! PropertyToggle needs a scene!")
+            console.error("HEY! Corner needs a scene!")
             return
         }
 
-        const x = 850;
-        const y = 50;
         const width = 20;
         const height = 20;
 
-        const background = scene.rexUI.add.roundRectangle(x, y, 0, 0, height / 2, 0xff99ff)
-        const text = scene.add.text(x - height / 8, y - height / 4, "P", { fontSize: height * 2 / 3 })
+        const background = scene.rexUI.add.roundRectangle(x, y, 0, 0, 0, 0xff99ff)
 
         super(scene, { width, height, x, y, background });
-        super.add(text)
         this.background = background
-        this.text = text
 
         this.setInteractive().on('pointerdown', (...args) => this.onClick(args) );
     }

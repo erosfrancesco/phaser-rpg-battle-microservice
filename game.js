@@ -1,5 +1,5 @@
-import Game from "./utils/index.js";
-import Logic from "./js/index.js";
+// import Game from "./utils/index.js";
+// import Logic from "./js/index.js";
 
 
 // import BuilderScene from "../builders/index.js";

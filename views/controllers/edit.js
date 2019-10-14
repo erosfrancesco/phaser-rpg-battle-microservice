@@ -66,34 +66,48 @@
 
 // Game.addScene(EditObjectScene);
 // Game.startScene(EditObjectScene.key);
+import GameObjectsPoolScene from './utils/gameObjectManagerScene.js';
+import PropertyButton from './PropertyToggle.js'
+import Corner from './Corner.js'
+import PIWrapper from './utils/PIWrapper.js'
 
-class EditObject extends Phaser.Scene {
+class EditObject extends GameObjectsPoolScene {
     constructor() {
-        super({
-            key: 'examples'
-        })
+        super()
     }
 
     preload() {
-        this.load.scenePlugin({
-            key: 'rexuiplugin',
-            url: 'views/controllers/plugins/rexuiplugin.min.js',
-            sceneKey: 'rexUI'
-        });
-
-        this.load.scenePlugin({
-            key: 'rexdragplugin',
-            url: 'views/controllers/plugins/dragplugin.min.js',
-            sceneKey: 'rexDrag'
-        });
+        super.preload()
     }
 
     create() {
-        const obj1 = this.rexUI.add.roundRectangle(500, 100, 100, 40, 20, 0x5e92f3);
+        this.propertyButton = new PropertyButton(this);
+        
 
-        obj1.drag = this.rexDrag.add(obj1);
-        obj1.on('pointerdown', obj1.drag.dragend, obj1.drag);
-        obj1.on('dragend', () => console.log('dragend') );
+        const horCornerLine = this.add.line(
+            0,
+            0,
+            0,
+            0,
+            0 + 15,
+            0,
+            0xfff
+        ).setOrigin(0, 0)
+
+        const verCornerLine = this.add.line(
+            0,
+            0,
+            0,
+            0,
+            0,
+            0 + 15,
+            0xfff
+        ).setOrigin(0, 0)
+
+        
+        this.wrapper = new PIWrapper(this, 150, 50, 15, 15, horCornerLine, verCornerLine)
+
+        this.wrapper.onPointerDown = () => console.log("Point")
     }
 }
 
