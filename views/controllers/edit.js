@@ -67,8 +67,8 @@
 // Game.addScene(EditObjectScene);
 // Game.startScene(EditObjectScene.key);
 import GameObjectsPoolScene from './utils/gameObjectManagerScene.js';
-import PropertyButton from './PropertyToggle.js'
-import Corner from './Corner.js'
+// import PropertyButton from './PropertyToggle.js'
+import CornerArrows from './utils/CornerArrows.js'
 import PIWrapper from './utils/PIWrapper.js'
 
 class EditObject extends GameObjectsPoolScene {
@@ -81,33 +81,41 @@ class EditObject extends GameObjectsPoolScene {
     }
 
     create() {
-        this.propertyButton = new PropertyButton(this);
-        
+        // this.propertyButton = new PropertyButton(this);
+        const back = this.rexUI.add.roundRectangle(400, 200, 40, 80, 0, 0xffffff)        
+        this.setDecoratorsTo(back)
+    }
 
-        const horCornerLine = this.add.line(
-            0,
-            0,
-            0,
-            0,
-            0 + 15,
-            0,
-            0xfff
-        ).setOrigin(0, 0)
+    setDecoratorsTo(item) {
+        const corners = new CornerArrows(this, item)
 
-        const verCornerLine = this.add.line(
-            0,
-            0,
-            0,
-            0,
-            0,
-            0 + 15,
-            0xfff
-        ).setOrigin(0, 0)
+        const s = 14
+        const ccHor = this.add.line(s / 2, s / 2, 0, 0, s, 0, 0x333333)
+        const ccVer = this.add.line(s / 2, s / 2, 0, 0, 0, s, 0x333333)
+        const center = new PIWrapper(this, 400 - s / 2, 200 - s / 2, s, s, ccHor, ccVer)
+        center.setColor(0x555)
+        center.setOpacity(0.2)
 
-        
-        this.wrapper = new PIWrapper(this, 150, 50, 15, 15, horCornerLine, verCornerLine)
+        center.alignToParent = () => {
+            center.x = item.x - s / 2
+            center.y = item.y - s / 2
+        }
+        center.onDrag.push( (...args) => {
+            const [p, x, y] = args
+            item.x = x + s / 2
+            item.y = y + s / 2
+            corners.alignToParent()
+        })
 
-        this.wrapper.onPointerDown = () => console.log("Point")
+        corners.topLeft.onDrag.push(center.alignToParent)
+        corners.topRight.onDrag.push(center.alignToParent)
+        corners.downLeft.onDrag.push(center.alignToParent)
+        corners.downRight.onDrag.push(center.alignToParent)
+
+        item.decorators = {
+            corners,
+            center
+        }
     }
 }
 
