@@ -8,13 +8,31 @@
 
     <title> Phaser 3 Edit Object </title>
     <link rel="stylesheet" type="text/css" href="./views/canvas.css" />
+    
+    
+
+    <script type="module">
+        import COMPONENTS from "./views/controllers/htmlWidgets/GameCanvas.js"
+        const {
+            GameCanvas,
+            LeftBox
+        } = COMPONENTS
+
+        GameCanvas(document)
+        LeftBox(document)
+
+        
+    </script>
 
     <script src="../utils/3.18.1.js"></script>
     <script type="module" src="./views/controllers/edit.js"></script>
+
+    
+
 </head>
 
 <body>
-    <div id="game-container"></div>
+    <button onClick="window.LeftBox.toggle();">Toggle Properties Box</button>
 </body>
 
 </html>

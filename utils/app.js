@@ -10,15 +10,11 @@ const initApp = () => {
 // Resize
 const resizeApp = () => {
     const div = document.getElementById('game-container');
-    
     if (!div) { return; }
 
     const ratio = config.height / config.width;
 
-    // div.style.maxWidth = config.width + "px";
-    // div.style.maxHeight = config.height + "px";
-
-    ( window.innerHeight > (window.innerWidth * ratio) ) ? resizeDivByHeight(div, ratio) : resizeDivByWidth(div, ratio);
+    ( div.parentNode.innerHeight > (div.parentNode.innerWidth * ratio) ) ? resizeDivByHeight(div, ratio) : resizeDivByWidth(div, ratio);
    
 }
 
