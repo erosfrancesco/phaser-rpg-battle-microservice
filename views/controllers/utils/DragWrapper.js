@@ -1,4 +1,4 @@
-export default function PIWrapper(scene, x = 100, y = 100, w = 100, h = 100, ...childrens) {
+export default function DragWrapper(scene, x = 100, y = 100, w = 100, h = 100, ...childrens) {
 
     if (!scene) {
         console.error("HEY! Wrapper needs a scene!")
@@ -14,7 +14,7 @@ export default function PIWrapper(scene, x = 100, y = 100, w = 100, h = 100, ...
     wrapper.onDragStart = [() => {}]
 
 
-    background.setInteractive().setOrigin(0,0)
+    background.setInteractive().setOrigin(0, 0)
     background.drag = scene.rexDrag.add(background);
     wrapper.background = background
     wrapper.initialPosition = {x, y};

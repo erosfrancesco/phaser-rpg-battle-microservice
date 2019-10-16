@@ -103,6 +103,16 @@ function SelectedItemProperties() {
                         }
                         window.currentSelectedItem.selectedOldPointers = {x: false, y: false, width: false, height: false}
 
+                        const h4 = document.createElement("h4")
+                        itemProps.appendChild(h4)
+                        h4.style.color = "white"
+                        h4.innerHTML = window.currentSelectedItem.id
+
+                        const itemN = UIInput("name", "text", window.currentSelectedItem.item.name || "")
+                        itemProps.appendChild(itemN)
+                        itemN.input.onkeydown = () => { window.currentSelectedItem.item.name = itemN.input.value; }
+
+
                         const itemX = UIInput("x", "number", window.currentSelectedItem.item.x)
                         itemProps.appendChild(itemX)
                         window.currentSelectedItem.addChangeEventOn("x", v => { itemX.input.value = v })

@@ -11,14 +11,11 @@ class EditObject extends GameObjectsPoolScene {
     }
 
     create() {
-        const back = this.rexUI.add.roundRectangle(400, 200, 40, 80, 0, 0xffffff)
-        const item = PIBaseObject(back)
-        this.selectItem(item)
-        
-        // setTimeout(() => {
-        //     this.selectItem(item)
-        //     console.log(window.currentSelectedItem)
-        // }, 200 )
+        const back = this.rexUI.add.roundRectangle(300, 150, 40, 80, 0, 0xffffff)
+        const item1 = PIBaseObject(back)
+
+        const front = this.rexUI.add.roundRectangle(400, 200, 40, 80, 0, 0xff66ff)
+        const item2 = PIBaseObject(front)
     }
         
 
@@ -31,6 +28,7 @@ class EditObject extends GameObjectsPoolScene {
     }
 
     setSelectedItem(PIitem) {
+        PIitem.showArrows()
         window.currentSelectedItem = PIitem
         window.ItemProperties.update()
     }
@@ -41,7 +39,10 @@ class EditObject extends GameObjectsPoolScene {
             window.currentSelectedItem.removeChangeEventOn(key, index)
         })
         window.currentSelectedItem.selectedOldPointers = false
+
+        window.currentSelectedItem.hideArrows()
         window.currentSelectedItem = false
+
         window.ItemProperties.innerHTML = ""
     }
 }

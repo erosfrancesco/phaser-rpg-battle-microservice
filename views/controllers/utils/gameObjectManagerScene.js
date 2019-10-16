@@ -33,33 +33,14 @@ export default class GameObjectsScene extends Phaser.Scene {
     getItem(item) {
         return this.objects.find(itemFoo => itemFoo === item)
     }
-    add(item, name = "Game Obj. " + this.objects.length, parent = null) {
+    addGameObject(item, parent = null, name = "Game Obj. " + this.objects.length) {
         this.objects.push({id: name, item, parent});
-        
-        item.drag = this.rexDrag.add(item);
-        item.on('pointerdown', item.drag.dragend, () => {
-            item.drag();
-            this.dragging(item)
-        });
-        item.on('dragend', () => this.releaseObject(item) );
-        item.on('pointerdown', (...args) => {
-            this.selectedObject = item
-            item.onClick(...args)
-        })
+        item.id = name  
     }
     remove(i) {
         this.objects.splice(i, 1)
     }
     rename(i, newName) {
         this.objects[i].id = newName
-    }
-
-    // Drag Manager
-    dragging(object) {
-
-    }
-    releaseObject(object) {
-        // check if object overlaps with another
-        // and add to a parent if necessary
     }
 }

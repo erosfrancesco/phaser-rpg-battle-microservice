@@ -1,31 +1,62 @@
 import CornerArrows from './CornerArrows.js'
-import PIWrapper from './PIWrapper.js'
+import DragWrapper from './DragWrapper.js'
 
-export default function PIBaseObjectFrom(item, scene) {
+export default function PIBaseObjectFrom(item) {
     const a = {
         item,
         events: {},
         addChangeEventOn: (prop, callback) => {
-            a.events[prop] = a.events[prop] || []
-            a.events[prop].unshift(callback)
-            return a.events[prop].length 
+            a.events[prop] = a.events[prop] || {}
+            const index = Object.keys(a.events[prop]).length
+            a.events[prop][index] = callback
+            return index
         },
         removeChangeEventOn: (prop, index) => {
-            a.events[prop].splice(index, 1)
+            a.events[prop][index] = false
         },
         modifyProperty: (prop, newValue) => {
             modifyProperty(a, prop, newValue);
             if (a.events[prop]) {
-                a.events[prop].forEach(c => c(newValue, item))
+                Object.keys(a.events[prop]).forEach(index => {
+                    if (a.events[prop][index]) {
+                        a.events[prop][index](newValue, item)
+                    }
+                })
             }
         }
     };
 
-    a.decorators = setDecoratorsTo(a, scene)
+
+    a.hideArrows = () => {
+        Object.keys(a.decorators.oldArrowIndexes).forEach(key => {
+            const index = a.decorators.oldArrowIndexes[key]
+            a.removeChangeEventOn(key, index)
+        })
+
+        // remove arrows
+        a.decorators.center.destroy()
+        a.decorators.corners.destroy()
+    }
+
+    a.showArrows = () => {
+        a.decorators = setDecoratorsTo(a, item.scene)
+    }
+
+    item.scene.addGameObject(a)
+    setOnClick(a)
 
     return a
 }
 
+function setOnClick(PIitem) {
+    PIitem.item.setInteractive().setOrigin(0, 0).on("pointerdown", () => {
+        if (window.currentSelectedItem && window.currentSelectedItem.id === PIitem.id) {
+            console.log("same item")
+            return
+        }
+        PIitem.item.scene.selectItem(PIitem) 
+    })
+}
 
 
 function modifyProperty(o, prop, newValue) {
@@ -39,18 +70,18 @@ function setDecoratorsTo(PIitem) {
     const s = 14
     const ccHor = scene.add.line(s / 2, s / 2, 0, 0, s, 0, 0xfff)
     const ccVer = scene.add.line(s / 2, s / 2, 0, 0, 0, s, 0xfff)
-    const center = new PIWrapper(scene, 400 - s / 2, 200 - s / 2, s, s, ccHor, ccVer)
+    const center = new DragWrapper(scene, 0, 0, s, s, ccHor, ccVer)
     center.setColor(0xffffff)
     center.setOpacity(0.2)
 
     center.alignToParent = () => {
-        center.x = PIitem.item.x - s / 2
-        center.y = PIitem.item.y - s / 2
+        center.x = PIitem.item.x + (PIitem.item.width / 2) - (s / 2)
+        center.y = PIitem.item.y + (PIitem.item.height / 2) - (s / 2)
     }
     center.onDrag.push( (...args) => {
         const [p, x, y] = args
-        PIitem.modifyProperty("x", x + s / 2)
-        PIitem.modifyProperty("y", y + s / 2)
+        PIitem.modifyProperty("x", x - (PIitem.item.width / 2) + s / 2)
+        PIitem.modifyProperty("y", y - (PIitem.item.height / 2) + s / 2)
         corners.alignToParent()
     })
 
@@ -73,6 +104,8 @@ function setDecoratorsTo(PIitem) {
         center.alignToParent()
         corners.alignToParent()
     })
+
+    center.alignToParent()
 
     return {
         oldArrowIndexes: {x, y, width, height},
