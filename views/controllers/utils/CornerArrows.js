@@ -13,7 +13,7 @@ export default class CornerArrows {
                 return
             }
 
-            const {x, y, width, height} = parent
+            const {x, y, width, height} = parent.item
             this.parent = parent
             this.delta = 10
             const w = 13
@@ -35,7 +35,7 @@ export default class CornerArrows {
             const drHor = scene.add.line(0, h, 0, 0, w, 0, c).setOrigin(0, 0)
             const drVer = scene.add.line(w, 0, 0, 0, 0, h, c).setOrigin(0, 0)
             this.downRight = new PIWrapper(scene, 0, 0, w, h, drHor, drVer)
-        
+
 
             this.setCornerArrowTouch(this.topLeft, (x, y) => this.topLeftDragComputation(x, y))
             this.setCornerArrowTouch(this.topRight, (x, y) => this.topRightDragComputation(x, y))
@@ -48,18 +48,18 @@ export default class CornerArrows {
         setCornerArrowTouch(corner, computation = (fooX, fooY) => { return {} }) {
             corner.onDrag.push( (p, x, y) => {
                 if (!this.oldX) {
-                    this.oldX = this.parent.x
-                    this.oldY = this.parent.y
-                    this.oldW = this.parent.width
-                    this.oldH = this.parent.height
+                    this.oldX = this.parent.item.x
+                    this.oldY = this.parent.item.y
+                    this.oldW = this.parent.item.width
+                    this.oldH = this.parent.item.height
                 }
 
                 const {newW, newH, newX, newY} = computation(x, y)
 
-                this.parent.x = newX
-                this.parent.y = newY
-                this.parent.width = newW
-                this.parent.height = newH
+                this.parent.modifyProperty("x", newX)
+                this.parent.modifyProperty("y", newY)
+                this.parent.modifyProperty("width", newW)
+                this.parent.modifyProperty("height", newH)
 
                 // move the other arrows
                 this.alignToParent()
@@ -110,7 +110,7 @@ export default class CornerArrows {
         }
 
         alignToParent() {
-            const {x, y, width, height} = this.parent
+            const {x, y, width, height} = this.parent.item
             const w = 13
             const h = 13
 
