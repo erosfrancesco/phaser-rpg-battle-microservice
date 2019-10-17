@@ -1,59 +1,71 @@
-const defaultMargins = {
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-};
 const defaultColor = 0x666;
 
-export default class PIView {
-    // CONSTRUCTOR
-    constructor(scene, x = 0, y = 0, w = 0, h = 0, r = 0, margins = defaultMargins, color = defaultColor) {
+import PIBaseObject from '../utils/PIBaseObject.js'
+
+export default class PIView extends PIBaseObject {
+ 
+    constructor(scene, x = 0, y = 0, w = 0, h = 0, r = 0, color = defaultColor) {
         if (!scene) {
             console.error("Hey! PIView needs a scene parent")
             return
         }
         
-        this.parent = null
-        this.item = scene.rexUI.add.label({
-            background: scene.rexUI.add.roundRectangle(x, y, w, h, r, color),
-            space: margins
-        });
-    }
-    
-    // PROPS
-    get x() {
-        return this.item.x
-    }
-    set x(v) {
-        this.item.x = v
+        super(scene.rexUI.add.roundRectangle(x, y, w, h, r, color))
     }
 
-    get y() {
-        return this.item.x
-    }
-    set y(v) {
-        this.item.y = v
-    }
+    get encodedProperties() {
+        return [
+            encodedProperty("h4", { color: "white" }, v => { v.innerHTML = window.currentSelectedItem.id }),
+            textEncodedProperty("text", "name", 
+                                this.name || "", 
+                                false, false, 
+                                v => { this.name = v.input.value; }
+            ),
+            textEncodedProperty("number", "x",
+                                this.item.x, 
+                                v => this.addChangeEventOn("x", () => { v.input.value = this.item.x }), 
+                                v => this.modifyProperty("x", v.input.value)
+            ),
+            textEncodedProperty("number", "y", 
+                                this.item.y, 
+                                v => this.addChangeEventOn("y", () => { v.input.value = this.item.y }), 
+                                v => this.modifyProperty("y", v.input.value)
+            ),
+            textEncodedProperty("number", "width",
+                                this.item.width, 
+                                v => this.addChangeEventOn("width", () => { v.input.value = this.item.width }), 
+                                v => this.modifyProperty("width", v.input.value)
+            ),
+            textEncodedProperty("number", "height",
+                                this.item.height, 
+                                v => this.addChangeEventOn("height", () => { v.input.value = this.item.height }), 
+                                v => this.modifyProperty("height", v.input.value)
+            ),
+            textEncodedProperty("color", "color", 
+                                '#' + this.item.fillColor.toString(16), undefined, undefined,
+                                v => { this.item.fillColor = '0x' + v.input.value.substr(1); }),
 
-    get width() {
-        return this.item.width
-    }
-    set width(v) {
-        this.item.width = v
-    }
+            textEncodedProperty("number", "radius", 
+                                this.item.radius, undefined, undefined, 
+                                v => { this.item.radius = Number(v.input.value) })
 
-    get height() {
-        return this.item.height
+        ]
     }
-    set height(v) {
-        this.item.height = v
-    }
+}
 
-    get scene() {
-        return this.item.scene
+function encodedProperty(   type = "div", 
+                            style = {}, 
+                            build = () => {}, 
+                            onchange = false, 
+                            onkeydown = false
+) {
+    return {
+        type, style, build, onchange, onkeydown
     }
-    set scene(v) {
-        this.item.scene = v
-    }
+}
+
+function textEncodedProperty(type, name, value, build, onkeydown, onchange) {
+    const a = encodedProperty(undefined, undefined, build, onchange, onkeydown)
+    a.input = { type, value, name }
+    return a
 }

@@ -103,43 +103,27 @@ function SelectedItemProperties() {
                         }
                         window.currentSelectedItem.selectedOldPointers = {x: false, y: false, width: false, height: false}
 
-                        const h4 = document.createElement("h4")
-                        itemProps.appendChild(h4)
-                        h4.style.color = "white"
-                        h4.innerHTML = window.currentSelectedItem.id
+                        window.currentSelectedItem.encodedProperties.forEach(encoded => {
+                                const {input, type, style, build, onchange, onkeydown} = encoded
+                                let el = {}
 
-                        const itemN = UIInput("name", "text", window.currentSelectedItem.item.name || "")
-                        itemProps.appendChild(itemN)
-                        itemN.input.onkeydown = () => { window.currentSelectedItem.item.name = itemN.input.value; }
+                                if (!input) {
+                                        el = document.createElement(type)
+                                } else {
+                                        const { type, value, name } = input
+                                        el = UIInput(name, type, value)
+                                }
 
+                                if (build) { build(el) }
+                                if (onchange) { el.input.onchange = e => onchange(el, e) }
+                                if (onkeydown) { el.input.onkeydown = e => onkeydown(el, e) }
 
-                        const itemX = UIInput("x", "number", window.currentSelectedItem.item.x)
-                        itemProps.appendChild(itemX)
-                        window.currentSelectedItem.addChangeEventOn("x", v => { itemX.input.value = v })
-                        itemX.input.onkeydown = () => window.currentSelectedItem.modifyProperty("x", itemX.input.value)
-                        
-
-                        const itemY = UIInput("y", "number", window.currentSelectedItem.item.y)
-                        itemProps.appendChild(itemY)
-                        window.currentSelectedItem.addChangeEventOn("y", v => { itemY.input.value = v })
-                        itemY.input.onkeydown = () => window.currentSelectedItem.modifyProperty("y", itemY.input.value)
-
-
-                        const itemW = UIInput("width", "number", window.currentSelectedItem.item.width)
-                        itemProps.appendChild(itemW)
-                        window.currentSelectedItem.addChangeEventOn("width", v => { itemW.input.value = v })
-                        itemW.input.onkeydown = () => window.currentSelectedItem.modifyProperty("width", itemW.input.value)
-
-
-                        const itemH = UIInput("height", "number", window.currentSelectedItem.item.height)
-                        itemProps.appendChild(itemH)
-                        window.currentSelectedItem.addChangeEventOn("height", v => { itemH.input.value = v })
-                        itemH.input.onkeydown = () => window.currentSelectedItem.modifyProperty("height", itemH.input.value)
-
-                        
-                        const itemC = UIInput("color", "color", '#' + window.currentSelectedItem.item.fillColor.toString(16) )
-                        itemProps.appendChild(itemC)
-                        itemC.input.onchange = () => { window.currentSelectedItem.item.fillColor = '0x' + itemC.input.value.substr(1); }
+                                itemProps.appendChild(el)
+                                Object.keys(style).forEach(key => {
+                                        const value = style[key]
+                                        el.style[key] = value
+                                })
+                        })
                 }
         }
 }

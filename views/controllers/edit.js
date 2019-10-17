@@ -1,5 +1,5 @@
 import GameObjectsPoolScene from './utils/gameObjectManagerScene.js';
-import PIBaseObject from './utils/PIBaseObject.js'
+import PIView from "./gameObjects/PIView.js"
 
 class EditObject extends GameObjectsPoolScene {
     constructor() {
@@ -11,11 +11,8 @@ class EditObject extends GameObjectsPoolScene {
     }
 
     create() {
-        const back = this.rexUI.add.roundRectangle(300, 150, 40, 80, 0, 0xffffff)
-        const item1 = PIBaseObject(back)
-
-        const front = this.rexUI.add.roundRectangle(400, 200, 40, 80, 0, 0xff66ff)
-        const item2 = PIBaseObject(front)
+        const back = new PIView(this, 300, 150, 40, 80, 0, 0xffffff)
+        const front = new PIView(this, 200, 250, 40, 80, 0, 0xfaafff)
     }
         
 

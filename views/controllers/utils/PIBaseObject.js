@@ -1,52 +1,54 @@
 import CornerArrows from './CornerArrows.js'
 import DragWrapper from './DragWrapper.js'
 
-export default function PIBaseObjectFrom(item) {
-    const a = {
-        item,
-        events: {},
-        addChangeEventOn: (prop, callback) => {
-            a.events[prop] = a.events[prop] || {}
-            const index = Object.keys(a.events[prop]).length
-            a.events[prop][index] = callback
-            return index
-        },
-        removeChangeEventOn: (prop, index) => {
-            a.events[prop][index] = false
-        },
-        modifyProperty: (prop, newValue) => {
-            modifyProperty(a, prop, newValue);
-            if (a.events[prop]) {
-                Object.keys(a.events[prop]).forEach(index => {
-                    if (a.events[prop][index]) {
-                        a.events[prop][index](newValue, item)
-                    }
-                })
-            }
+export default class PIBaseObject {
+    constructor(item) {
+        this.item = item
+        this.events = {}
+        item.scene.addGameObject(this)
+        setOnClick(this)
+    }
+
+    addChangeEventOn (prop, callback) {
+        this.events[prop] = this.events[prop] || {}
+        const index = Object.keys(this.events[prop]).length
+        this.events[prop][index] = callback
+        return index
+    }
+
+    removeChangeEventOn (prop, index) {
+        this.events[prop][index] = false
+    }
+
+    modifyProperty (prop, newValue) {
+        modifyProperty(this, prop, newValue);
+        if (this.events[prop]) {
+            Object.keys(this.events[prop]).forEach(index => {
+                if (this.events[prop][index]) {
+                    this.events[prop][index](newValue, this.item)
+                }
+            })
         }
-    };
+    }
 
-
-    a.hideArrows = () => {
-        Object.keys(a.decorators.oldArrowIndexes).forEach(key => {
-            const index = a.decorators.oldArrowIndexes[key]
-            a.removeChangeEventOn(key, index)
+    
+    hideArrows () {
+        Object.keys(this.decorators.oldArrowIndexes).forEach(key => {
+            const index = this.decorators.oldArrowIndexes[key]
+            this.removeChangeEventOn(key, index)
         })
 
         // remove arrows
-        a.decorators.center.destroy()
-        a.decorators.corners.destroy()
+        this.decorators.center.destroy()
+        this.decorators.corners.destroy()
     }
 
-    a.showArrows = () => {
-        a.decorators = setDecoratorsTo(a, item.scene)
+    showArrows () {
+        this.decorators = setDecoratorsTo(this, this.item.scene)
     }
-
-    item.scene.addGameObject(a)
-    setOnClick(a)
-
-    return a
 }
+ 
+
 
 function setOnClick(PIitem) {
     PIitem.item.setInteractive().setOrigin(0, 0).on("pointerdown", () => {
