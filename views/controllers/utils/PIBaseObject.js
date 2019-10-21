@@ -1,34 +1,40 @@
-import CornerArrows from './CornerArrows.js'
-import DragWrapper from './DragWrapper.js'
+import ObservableProperties from './ObservableProperties.js'
+import SmartGuides from './SmartGuides/SmartGuides.js'
 
-export default class PIBaseObject {
+import setDecoratorsTo from './DragArrows/ObjectBridge.js'
+import setOnClick from './SelectObject/ObjectBridge.js'
+import JSONBridge from './Encoding/JSONBridge.js'
+
+
+export default class PIBaseObject extends ObservableProperties {
     constructor(item) {
+        super()
         this.item = item
-        this.events = {}
+        this.events = {onDrag: [], onDragStart: [], onDragEnd: []}
+        this.smartGuides = new SmartGuides(this, [
+            {
+                x: 0, y: 0
+            }, {
+                x: 1, y: 0
+            }, {
+                x: 1, y: 1
+            }, {
+                x: 0, y: 1
+            }, {
+                x: 0.5, y: 0.5
+            }
+        ])
         item.scene.addGameObject(this)
         setOnClick(this)
+        this._basicJSONEncodedProps = buildBasicJSONEncodedProps(this)
     }
 
-    addChangeEventOn (prop, callback) {
-        this.events[prop] = this.events[prop] || {}
-        const index = Object.keys(this.events[prop]).length
-        this.events[prop][index] = callback
-        return index
+    get observablePath() {
+        return this.item
     }
 
-    removeChangeEventOn (prop, index) {
-        this.events[prop][index] = false
-    }
-
-    modifyProperty (prop, newValue) {
-        modifyProperty(this, prop, newValue);
-        if (this.events[prop]) {
-            Object.keys(this.events[prop]).forEach(index => {
-                if (this.events[prop][index]) {
-                    this.events[prop][index](newValue, this.item)
-                }
-            })
-        }
+    deselect() {
+        this.hideArrows()
     }
 
     
@@ -44,74 +50,102 @@ export default class PIBaseObject {
     }
 
     showArrows () {
-        this.decorators = setDecoratorsTo(this, this.item.scene)
+        this.decorators = setDecoratorsTo(this, this.scene)
+    }
+
+
+    get scene() { return this.item.scene }
+    set scene(va) { this.item.scene = va }
+
+    get x() { return Number(this.item.x) }
+    set x(va) { this.item.x = Number(va) }
+
+    get y() { return Number(this.item.y) }
+    set y(va) { this.item.y = Number(va) }
+
+    get width() { return Number(this.item.width) }
+    set width(va) { this.item.width = Number(va) }
+
+    get height() { return Number(this.item.height) }
+    set height(va) { this.item.height = Number(va) }
+
+
+    //
+    get encodedProperties() {
+        const a = []
+        Object.keys(this.JSONEncodedProps).forEach(key => {
+            const {builder, args, events, section} = this.JSONEncodedProps[key]
+            const item = JSONBridge[builder](...args, this[key], ...events)
+            item.section = section
+
+            a.push( item ) 
+        })
+        return a
+    }
+
+    get JSONEncodedProps() {
+        return this._basicJSONEncodedProps
+    }
+
+    setFromJSON(JSONProps) {
+        Object.keys(JSONProps).forEach(key => {
+            const value = JSONProps[key]
+            this[key] = value
+        })
+    }
+
+    get convertedToJSON() {
+        const {x, y, width, height} = this
+        return {x, y, width, height}
     }
 }
- 
 
 
-function setOnClick(PIitem) {
-    PIitem.item.setInteractive().setOrigin(0, 0).on("pointerdown", () => {
-        if (window.currentSelectedItem && window.currentSelectedItem.id === PIitem.id) {
-            console.log("same item")
-            return
-        }
-        PIitem.item.scene.selectItem(PIitem) 
-    })
-}
 
-
-function modifyProperty(o, prop, newValue) {
-    o.item[prop] = newValue
-}
-
-function setDecoratorsTo(PIitem) {
-    const {scene} = PIitem.item
-    const corners = new CornerArrows(scene, PIitem)
-
-    const s = 14
-    const ccHor = scene.add.line(s / 2, s / 2, 0, 0, s, 0, 0xfff)
-    const ccVer = scene.add.line(s / 2, s / 2, 0, 0, 0, s, 0xfff)
-    const center = new DragWrapper(scene, 0, 0, s, s, ccHor, ccVer)
-    center.setColor(0xffffff)
-    center.setOpacity(0.2)
-
-    center.alignToParent = () => {
-        center.x = PIitem.item.x + (PIitem.item.width / 2) - (s / 2)
-        center.y = PIitem.item.y + (PIitem.item.height / 2) - (s / 2)
-    }
-    center.onDrag.push( (...args) => {
-        const [p, x, y] = args
-        PIitem.modifyProperty("x", x - (PIitem.item.width / 2) + s / 2)
-        PIitem.modifyProperty("y", y - (PIitem.item.height / 2) + s / 2)
-        corners.alignToParent()
-    })
-
-    const x = PIitem.addChangeEventOn("x", v => {
-        center.alignToParent()
-        corners.alignToParent()
-    })
-
-    const y = PIitem.addChangeEventOn("y", v => {
-        center.alignToParent()
-        corners.alignToParent()
-    })
-
-    const width = PIitem.addChangeEventOn("width", v => {
-        center.alignToParent()
-        corners.alignToParent()
-    })
-
-    const height = PIitem.addChangeEventOn("height", v => {
-        center.alignToParent()
-        corners.alignToParent()
-    })
-
-    center.alignToParent()
-
+function buildBasicJSONEncodedProps(o) {
     return {
-        oldArrowIndexes: {x, y, width, height},
-        corners,
-        center
+        name: {
+            builder: "textUIEncodedProperty",
+            args: ["text", "name"],
+            events: [undefined, undefined, v => { o.name = v.input.value; }],
+            section: 1
+        },
+
+        x: {
+            builder: "textUIEncodedProperty",
+            args: ["number", "x"],
+            events: [
+                v => o.addChangeEventOn("x", () => { v.input.value = o.x }), 
+                v => o.modifyProperty("x", v.input.value)
+            ],
+            section: 2
+        },
+        y: {
+            builder: "textUIEncodedProperty",
+            args: ["number", "y"],
+            events: [
+                v => o.addChangeEventOn("y", () => { v.input.value = o.y }), 
+                v => o.modifyProperty("y", v.input.value)
+            ],
+            section: 2
+        },
+        width: {
+            builder: "textUIEncodedProperty",
+            args: ["number", "width"],
+            events: [
+                v => o.addChangeEventOn("width", () => { v.input.value = o.width }), 
+                v => o.modifyProperty("width", v.input.value)
+            ],
+            section: 2
+        },
+        height: {
+            builder: "textUIEncodedProperty",
+            args: ["number", "height"],
+            events: [
+                v => o.addChangeEventOn("height", () => { v.input.value = o.height }),
+                v => o.modifyProperty("height", v.input.value)
+            ],
+            section: 2
+        }
     }
 }

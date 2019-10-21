@@ -113,17 +113,17 @@ export default class CornerArrows {
         const w = 13
         const h = 13
 
-        this.topLeft.x = x - this.delta // - width / 2
-        this.topLeft.y = y - this.delta // - height / 2
+        this.topLeft.x = x - this.delta
+        this.topLeft.y = y - this.delta
 
-        this.topRight.x = x - w + this.delta + width // / 2
-        this.topRight.y = y - this.delta // - height / 2
+        this.topRight.x = x - w + this.delta + width
+        this.topRight.y = y - this.delta
 
-        this.downLeft.x = x - this.delta // - width / 2
-        this.downLeft.y = y - h + this.delta + height // / 2
+        this.downLeft.x = x - this.delta
+        this.downLeft.y = y - h + this.delta + height
 
-        this.downRight.x = x - w + this.delta + width // / 2
-        this.downRight.y = y - h + this.delta + height // / 2
+        this.downRight.x = x - w + this.delta + width
+        this.downRight.y = y - h + this.delta + height
     }
 
     destroy() {

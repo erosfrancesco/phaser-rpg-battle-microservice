@@ -1,4 +1,5 @@
 import config from '../config.js'
+import WidgetBridge from './WidgetBridge.js'
 
 function GameCanvas(document) {
         const wrapper = document.createElement('div')
@@ -95,55 +96,7 @@ function SelectedItemProperties() {
 
         window.ItemProperties = itemProps
 
-        itemProps.update = () => {
-                if (window.currentSelectedItem) {
-                        
-                        if (window.currentSelectedItem.selectedOldPointers) {
-                                return
-                        }
-                        window.currentSelectedItem.selectedOldPointers = {x: false, y: false, width: false, height: false}
-
-                        window.currentSelectedItem.encodedProperties.forEach(encoded => {
-                                const {input, type, style, build, onchange, onkeydown} = encoded
-                                let el = {}
-
-                                if (!input) {
-                                        el = document.createElement(type)
-                                } else {
-                                        const { type, value, name } = input
-                                        el = UIInput(name, type, value)
-                                }
-
-                                if (build) { build(el) }
-                                if (onchange) { el.input.onchange = e => onchange(el, e) }
-                                if (onkeydown) { el.input.onkeydown = e => onkeydown(el, e) }
-
-                                itemProps.appendChild(el)
-                                Object.keys(style).forEach(key => {
-                                        const value = style[key]
-                                        el.style[key] = value
-                                })
-                        })
-                }
-        }
-}
-
-function UIInput(name = "", type = "text", value = "") {
-        const div = document.createElement('div')
-        div.style.margin = "auto"
-
-        const input = document.createElement('input')
-        input.type = type
-        input.value = value
-
-        const text = document.createElement('span')
-        text.innerHTML = name + " "
-        text.style.color = "white"
-
-        div.appendChild(text)
-        div.appendChild(input)
-        div.input = input
-        return div
+        itemProps.update = () => WidgetBridge(itemProps, window.currentSelectedItem)
 }
 
 export default  {

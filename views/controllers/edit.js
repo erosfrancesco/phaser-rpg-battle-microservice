@@ -1,6 +1,9 @@
 import GameObjectsPoolScene from './utils/gameObjectManagerScene.js';
 import PIView from "./gameObjects/PIView.js"
 
+import setSmartGuides from "./utils/SmartGuides/SceneBridge.js"
+import setSelectFunctionalityTo from "./utils/SelectObject/SceneBridge.js"
+
 class EditObject extends GameObjectsPoolScene {
     constructor() {
         super()
@@ -11,36 +14,35 @@ class EditObject extends GameObjectsPoolScene {
     }
 
     create() {
-        const back = new PIView(this, 300, 150, 40, 80, 0, 0xffffff)
-        const front = new PIView(this, 200, 250, 40, 80, 0, 0xfaafff)
-    }
+
+        setSmartGuides(this)
+        setSelectFunctionalityTo(this)
         
+        const back = new PIView(this)
+        const front = new PIView(this, 350, 200, 40, 80, 0, 0xfaafff)
 
-    selectItem(PIitem) {
-        if (window.currentSelectedItem) {
-            this.removeSelectedItem()
-        }
+        back.setFromJSON({color: 0xffaaaa, width: 200, height: 30, x: 4, y: 400, opacity: 0.4, radius: 4})
 
-        this.setSelectedItem(PIitem)
+        console.log(this.saveEdits())
+        
+        
     }
 
-    setSelectedItem(PIitem) {
-        PIitem.showArrows()
-        window.currentSelectedItem = PIitem
-        window.ItemProperties.update()
+    addGameObject(...args) {
+        super.addGameObject(...args)
+
+        const [item] = args
+
+        this.setSmartGuidesX(item)
+        this.setSmartGuidesY(item)
     }
 
-    removeSelectedItem() {
-        Object.keys(window.currentSelectedItem.selectedOldPointers).forEach(key => {
-            const index = window.currentSelectedItem.selectedOldPointers[key]
-            window.currentSelectedItem.removeChangeEventOn(key, index)
+    saveEdits() {
+        const a = {}
+        super.forEachGameObject(gameObject => {
+            a[gameObject.id] = gameObject.item.convertedToJSON
         })
-        window.currentSelectedItem.selectedOldPointers = false
-
-        window.currentSelectedItem.hideArrows()
-        window.currentSelectedItem = false
-
-        window.ItemProperties.innerHTML = ""
+        return a
     }
 }
 

@@ -30,8 +30,8 @@ export default class GameObjectsScene extends Phaser.Scene {
     getById(id) {
         return this.objects.find(item => item.id === id)
     }
-    getItem(item) {
-        return this.objects.find(itemFoo => itemFoo === item)
+    getItem(itemExp) {
+        return this.objects.find(itemFoo => itemExp(itemFoo))
     }
     addGameObject(item, parent = null, name = "Game Obj. " + this.objects.length) {
         this.objects.push({id: name, item, parent});
@@ -43,4 +43,5 @@ export default class GameObjectsScene extends Phaser.Scene {
     rename(i, newName) {
         this.objects[i].id = newName
     }
+    forEachGameObject(i = (item, index) => {}) { this.objects.forEach((item, index) => i(item, index)) }
 }

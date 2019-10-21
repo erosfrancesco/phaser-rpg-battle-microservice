@@ -1,71 +1,70 @@
 const defaultColor = 0x666;
 
 import PIBaseObject from '../utils/PIBaseObject.js'
+import JSONBridge from '../utils/Encoding/JSONBridge.js'
+const {simpleUIEncodedProperty, textUIEncodedProperty} = JSONBridge
 
 export default class PIView extends PIBaseObject {
  
-    constructor(scene, x = 0, y = 0, w = 0, h = 0, r = 0, color = defaultColor) {
+    constructor(scene, ...args) {
         if (!scene) {
             console.error("Hey! PIView needs a scene parent")
             return
         }
+
+        if (args[1]) {
+            const [x = 0, y = 0, w = 10, h = 10, r = 0, color = defaultColor] = args
+            super(scene.rexUI.add.roundRectangle(x, y, w, h, r, color))
+        } else {
+            
+            const { x = 0, y = 0, w = 100, h = 100, r = 0, color = defaultColor } = args
+            super(scene.rexUI.add.roundRectangle(x, y, w, h, r, color))
+        }
+    }
+
+    get radius() { return this.item.radius }
+    set radius(va) { this.item.radius = Number(va) }
+
+    get color() { return this.item.fillColor }
+    set color(va) { this.item.fillColor = va }
+
+    get opacity() { return this.item.fillAlpha }
+    set opacity(va) { this.item.fillAlpha = Number(va) }
+
+    get convertedToJSON() {
+        const {color, radius, opacity} = this
+        return Object.assign(super.convertedToJSON, {color, radius, opacity})
+    }
+    get JSONEncodedProps() {
+        return Object.assign(super.JSONEncodedProps, {
+            radius: {
+                builder: "textUIEncodedProperty",
+                args: ["number", "radius"],
+                events: [
+                    undefined, undefined, v => { this.radius = v.input.value }
+                ],
+                section: 2
+            },
         
-        super(scene.rexUI.add.roundRectangle(x, y, w, h, r, color))
+            color: {
+                builder: "textUIEncodedProperty",
+                args: ["color", "color"],
+                events: [
+                    v => { v.input.value = '#' + this.color.toString(16) }, 
+                    undefined, 
+                    v => { this.color = '0x' + v.input.value.substr(1); }
+                ],
+                section: 3
+            },
+            opacity: {
+                section: 3,
+                builder: "textUIEncodedProperty",
+                args: ["number", "opacity (%)"],
+                events: [
+                    el => { el.input.value = this.opacity * 100 }, 
+                    undefined,
+                    v => { this.opacity = v.input.value / 100 }]
+            }
+        })
     }
-
-    get encodedProperties() {
-        return [
-            encodedProperty("h4", { color: "white" }, v => { v.innerHTML = window.currentSelectedItem.id }),
-            textEncodedProperty("text", "name", 
-                                this.name || "", 
-                                false, false, 
-                                v => { this.name = v.input.value; }
-            ),
-            textEncodedProperty("number", "x",
-                                this.item.x, 
-                                v => this.addChangeEventOn("x", () => { v.input.value = this.item.x }), 
-                                v => this.modifyProperty("x", v.input.value)
-            ),
-            textEncodedProperty("number", "y", 
-                                this.item.y, 
-                                v => this.addChangeEventOn("y", () => { v.input.value = this.item.y }), 
-                                v => this.modifyProperty("y", v.input.value)
-            ),
-            textEncodedProperty("number", "width",
-                                this.item.width, 
-                                v => this.addChangeEventOn("width", () => { v.input.value = this.item.width }), 
-                                v => this.modifyProperty("width", v.input.value)
-            ),
-            textEncodedProperty("number", "height",
-                                this.item.height, 
-                                v => this.addChangeEventOn("height", () => { v.input.value = this.item.height }), 
-                                v => this.modifyProperty("height", v.input.value)
-            ),
-            textEncodedProperty("color", "color", 
-                                '#' + this.item.fillColor.toString(16), undefined, undefined,
-                                v => { this.item.fillColor = '0x' + v.input.value.substr(1); }),
-
-            textEncodedProperty("number", "radius", 
-                                this.item.radius, undefined, undefined, 
-                                v => { this.item.radius = Number(v.input.value) })
-
-        ]
-    }
-}
-
-function encodedProperty(   type = "div", 
-                            style = {}, 
-                            build = () => {}, 
-                            onchange = false, 
-                            onkeydown = false
-) {
-    return {
-        type, style, build, onchange, onkeydown
-    }
-}
-
-function textEncodedProperty(type, name, value, build, onkeydown, onchange) {
-    const a = encodedProperty(undefined, undefined, build, onchange, onkeydown)
-    a.input = { type, value, name }
-    return a
 }
