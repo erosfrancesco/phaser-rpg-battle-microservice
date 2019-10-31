@@ -6,9 +6,13 @@ export default class SmartGuides {
 
     checkXWith(item2, points, radius = 10) { 
         const smartGuidesCouples = this.computeSmartCoupling(points)
-        return smartGuidesCouples.find(([p1, p2]) => 
+         
+        const couple = smartGuidesCouples.find(([p1, p2]) => 
             Math.abs(this.computeXOf(p2, item2) - this.computeXOf(p1, this.item)) < radius 
         )
+        // console.log(couple, this.item, item2)
+
+        return couple
     }
     checkYWith(item2, points, radius = 10) { 
         const smartGuidesCouples = this.computeSmartCoupling(points)
@@ -16,6 +20,21 @@ export default class SmartGuides {
             Math.abs(this.computeYOf(p2, item2) - this.computeYOf(p1, this.item)) < radius 
         )
     }
+    checkWWith(item2, points, radius = 10) { 
+        const {width} = this.item
+        const smartGuidesCouples = this.computeSmartCoupling(points)
+        return smartGuidesCouples.find(([p1, p2]) => 
+            Math.abs(this.computeXOf(p2, item2) - (this.computeXOf(p1, this.item) + width)) < radius 
+        )
+    }
+    checkHWith(item2, points, radius = 10) { 
+        const {height} = this.item
+        const smartGuidesCouples = this.computeSmartCoupling(points)
+        return smartGuidesCouples.find(([p1, p2]) => 
+            Math.abs(this.computeYOf(p2, item2) - (this.computeYOf(p1, this.item) + height)) < radius 
+        )
+    }
+
 
     computeSmartCoupling(points) {
         const smartGuidesCouples = []
@@ -23,7 +42,8 @@ export default class SmartGuides {
         return smartGuidesCouples
     }
 
-    computeXOf(origin, {x, width}) {
+    computeXOf(origin, {x, width, displayItem}) {
+        console.log(displayItem)
         return x + origin.x * width
     }
 

@@ -29,6 +29,14 @@ export default function setSelectFunctionalityTo(scene) {
             scene.smartGuidesY.line.destroy()
         }
 
+        if (scene.smartGuidesW.line) {
+            scene.smartGuidesW.line.destroy()
+        }
+
+        if (scene.smartGuidesH.line) {
+            scene.smartGuidesH.line.destroy()
+        }
+
         selected.deselect()
         
         window.currentSelectedItem = false

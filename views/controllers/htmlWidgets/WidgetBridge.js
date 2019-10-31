@@ -1,18 +1,25 @@
 export default function WidgetBridge(itemProps, selectedItem) {
-        if (selectedItem) {
+        console.log(itemProps, selectedItem.data)
+        if (!selectedItem) {
+                return
+        }
                 
-                if (selectedItem.selectedOldPointers) {
-                        return
-                }
-                selectedItem.selectedOldPointers = {x: false, y: false, width: false, height: false}
-
-
+                // if (selectedItem.selectedOldPointers) {
+                //         return
+                // }
+                // selectedItem.selectedOldPointers = {x: false, y: false, width: false, height: false}
 
                 // id - standard
                 const id = document.createElement("h4")
                 id.innerHTML = selectedItem.id
                 id.style.color = "white"
                 itemProps.appendChild(id)
+
+                if (!selectedItem.encodedProperties) {
+                        selectedItem.selectedOldPointers = false
+                        id.innerHTML = "Item has no displayable properties"
+                        return       
+                }
 
                 const sections = {}
                 selectedItem.encodedProperties.forEach(encoded => {
@@ -40,7 +47,6 @@ export default function WidgetBridge(itemProps, selectedItem) {
                                 el.style[key] = value
                         })
                 })
-        }
 }
 
 function createSection(parent, id) {
