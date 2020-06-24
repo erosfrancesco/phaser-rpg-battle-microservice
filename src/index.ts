@@ -3,11 +3,11 @@ import { Engine } from "@babylonjs/core/Engines/engine";
 
 // Get the canvas element from the DOM - Associate a Babylon Engine to it.
 const canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
-const engine = new Engine(canvas);
+const engine = new Engine(canvas, true, { stencil: true });
 
 
 // Load the desired scene
-import loadScene from './scenes/meshAndSprite'
+import loadScene from './scenes/materials'
 const scene = loadScene(engine)
 
 
@@ -19,5 +19,6 @@ scene.debugLayer.show();
 
 // Render every frame
 engine.runRenderLoop(() => {
+	// console.log( scene.activeCamera.position )
     scene.render();
 });

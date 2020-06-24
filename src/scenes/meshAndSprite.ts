@@ -25,7 +25,8 @@ export default (engine: Engine, options :any = {}) :Scene => {
     // Create camera and light
     const light = new PointLight("Point", new Vector3(5, 10, 5), scene);
     const camera = new ArcRotateCamera("Camera", 0, 0, 4, new Vector3(0, 0, 0), scene);
-    camera.attachControl(engine.getRenderingCanvas(), true);
+    // Link user controls to camera
+    // camera.attachControl(engine.getRenderingCanvas(), true);
 
 
     //Create a manager for the player's sprite animation
@@ -51,6 +52,14 @@ export default (engine: Engine, options :any = {}) :Scene => {
         }
 	}));
 
+
+    //
+    const sprite2ManagerPlayer = new SpriteManager("playerManager", "assets/arshes13.png", 2, {width: 62, height: 62}, scene);
+    // First sprite
+    const player2 = new Sprite("player", sprite2ManagerPlayer);
+    player2.isPickable = true;
+    player2.position.x = 1
+    
 
 
     return scene;

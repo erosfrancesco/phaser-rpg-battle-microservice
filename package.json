@@ -9,11 +9,12 @@
     "@babylonjs/inspector": "^4.0.3",
     "@babylonjs/materials": "^4.0.3",
     "grid": "^3.3.7",
+    "sky": "^0.5.0",
     "ts-loader": "^6.2.1",
-    "typescript": "^3.7.3",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0"
+    "typescript": "^3.8.2",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
